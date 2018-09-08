@@ -34,12 +34,12 @@ public class User{
     @OneToMany(mappedBy = "uploader")
     private Set<Resource> uploadRes;
 
-    @ManyToMany(cascade = CascadeType.PERSIST,fetch = FetchType.LAZY)
+    @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "download_res",
-            joinColumns = {@JoinColumn(name = "userId",referencedColumnName = "userId")},
+            joinColumns = {@JoinColumn(name = "downloaderId",referencedColumnName = "userId")},
             inverseJoinColumns = {@JoinColumn(name = "resourceId",referencedColumnName = "resourceId")})
     private Set<Resource> downloadRes;
 
-    @OneToMany(mappedBy = "user")
+    @OneToMany(mappedBy = "publisher")
     private Set<AuctionMsg> auctions;
 }
