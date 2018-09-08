@@ -34,5 +34,4 @@ public class User extends Account{
 
     @OneToMany(mappedBy = "user")
     private Set<AuctionMsg> auctions;
-
 }

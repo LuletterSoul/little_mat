@@ -17,6 +17,7 @@ public class Photo {
     private Integer photoId;
     private String photoPath;
 
-    @ManyToMany(fetch = FetchType.LAZY,mappedBy = "photos")
-    private Set<AuctionMsg> auctionMsgs;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name="amsgId")
+    private AuctionMsg auctionMsg;
 }

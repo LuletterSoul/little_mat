@@ -29,9 +29,6 @@ public class AuctionMsg {
     @JoinColumn(name = "userId")
     private User user;
 
-    @ManyToMany(cascade = CascadeType.PERSIST,fetch = FetchType.LAZY)
-    @JoinTable(name = "auction_photo",
-            joinColumns = {@JoinColumn(name = "amsgId", referencedColumnName = "amsgId")},
-            inverseJoinColumns = {@JoinColumn(name = "photoId", referencedColumnName ="photoId")})
+    @OneToMany(mappedBy = "auctionMsg")
     private Set<Photo> photos;
 }
