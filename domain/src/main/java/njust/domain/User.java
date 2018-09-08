@@ -1,15 +1,19 @@
 package njust.domain;
 
 import lombok.Data;
+import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
 import java.util.Set;
 
+@Table(name = "user",schema = "")
 @Entity
 @Data
-public class User extends Account{
+public class User{
 
-    @Column(unique = true)
+    @Id
+    @GenericGenerator(name = "increment", strategy = "increment")
+    @GeneratedValue(generator = "increment")
     private Integer userId;
 
     private String name;
@@ -18,6 +22,10 @@ public class User extends Account{
     private String phone;
     private String grade;
     private String major;
+
+    @OneToOne
+    @JoinColumn(name = "accountId")
+    private Account account;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name="depId")

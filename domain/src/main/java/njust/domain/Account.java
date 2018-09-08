@@ -9,8 +9,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+@Table(name = "account",schema = "")
 @Entity
-@Table(name = "account")
 @Data
 public class Account {
     @Id
