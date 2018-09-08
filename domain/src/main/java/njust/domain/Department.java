@@ -1,5 +1,6 @@
 package njust.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 import org.hibernate.annotations.GenericGenerator;
 
@@ -20,6 +21,7 @@ public class Department {
     @OneToMany(mappedBy = "department")
     private Set<User> users;
 
+    @JsonIgnore
     @ManyToMany(cascade = CascadeType.PERSIST, fetch = FetchType.LAZY)
     @JoinTable(name = "department_course",
             joinColumns = {@JoinColumn(name = "depId", referencedColumnName = "depId")},

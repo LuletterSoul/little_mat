@@ -1,5 +1,6 @@
 package njust.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 import org.hibernate.annotations.GenericGenerator;
 
@@ -31,15 +32,18 @@ public class User{
     @JoinColumn(name="depId")
     private Department department;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "uploader")
     private Set<Resource> uploadRes;
 
+    @JsonIgnore
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "download_res",
             joinColumns = {@JoinColumn(name = "downloaderId",referencedColumnName = "userId")},
             inverseJoinColumns = {@JoinColumn(name = "resourceId",referencedColumnName = "resourceId")})
     private Set<Resource> downloadRes;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "publisher")
     private Set<AuctionMsg> auctions;
 }

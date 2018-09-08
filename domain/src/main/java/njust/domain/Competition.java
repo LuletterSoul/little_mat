@@ -1,5 +1,6 @@
 package njust.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 import org.hibernate.annotations.GenericGenerator;
 
@@ -17,6 +18,7 @@ public class Competition {
     private Integer comId;
     private String comName;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "competition")
     private Set<Resource> resources;
 }

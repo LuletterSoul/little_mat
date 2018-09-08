@@ -6,6 +6,7 @@ import java.util.Set;
 
 import javax.persistence.*;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.annotations.GenericGenerator;
 
 import lombok.Data;
@@ -40,6 +41,7 @@ public class AuctionMsg
     @JoinColumn(name = "publisherId")
     private User publisher;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "auctionMsg")
     private Set<Photo> photos;
 }

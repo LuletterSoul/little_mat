@@ -1,5 +1,6 @@
 package njust.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 import org.hibernate.annotations.GenericGenerator;
 
@@ -18,6 +19,7 @@ public class Course {
     private String courseName;
     private Float credit;
 
+    @JsonIgnore
     @ManyToMany(fetch = FetchType.LAZY, mappedBy = "courses")
     private Set<Department> departments;
 

@@ -5,6 +5,7 @@ import java.util.Set;
 
 import javax.persistence.*;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.annotations.GenericGenerator;
 
 import lombok.Data;
@@ -39,6 +40,7 @@ public class Resource
     @JoinColumn(name = "uploaderId")
     private User uploader;
 
+    @JsonIgnore
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "download_res",
             joinColumns = {@JoinColumn(name = "resourceId",referencedColumnName = "resourceId")},
