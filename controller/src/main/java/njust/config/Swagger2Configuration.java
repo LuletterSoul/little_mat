@@ -21,7 +21,7 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 @EnableSwagger2
 @Configuration
 public class Swagger2Configuration {
-    private static final String SWAGGER_SCAN_BASE_PACKAGE = "njust.service";
+    private static final String SWAGGER_SCAN_BASE_PACKAGE = "njust.controller";
 
     @Bean
     public Docket createRestApi() {
