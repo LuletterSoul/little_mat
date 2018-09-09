@@ -1,0 +1,8 @@
+logging:
+  level:
+    org.springframework:
+      data: DEBUG
+      security: DEBUG
+spring:
+  session:
+    store-type: none
