@@ -20,7 +20,7 @@ public class Resource
     @Id
     @GenericGenerator(name = "increment", strategy = "increment")
     @GeneratedValue(generator = "increment")
-    private Integer resourceId;
+    private Integer resId;
 
     private String name;
 
@@ -28,9 +28,11 @@ public class Resource
 
     private String path;
 
-    private String type;
+    private Integer type;
 
     private Integer size;
+
+    private Integer status;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "courseId")
@@ -43,7 +45,7 @@ public class Resource
     @JsonIgnore
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "download_res",
-            joinColumns = {@JoinColumn(name = "resourceId",referencedColumnName = "resourceId")},
+            joinColumns = {@JoinColumn(name = "resId",referencedColumnName = "resId")},
             inverseJoinColumns = {@JoinColumn(name = "downloaderId",referencedColumnName = "userId")})
     private Set<User> downloaders;
 

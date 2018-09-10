@@ -7,7 +7,7 @@ import org.hibernate.annotations.GenericGenerator;
 import javax.persistence.*;
 import java.util.Set;
 
-@Table(name = "user",schema = "")
+@Table(name = "user")
 @Entity
 @Data
 public class User{
@@ -40,7 +40,7 @@ public class User{
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "download_res",
             joinColumns = {@JoinColumn(name = "downloaderId",referencedColumnName = "userId")},
-            inverseJoinColumns = {@JoinColumn(name = "resourceId",referencedColumnName = "resourceId")})
+            inverseJoinColumns = {@JoinColumn(name = "resId",referencedColumnName = "resId")})
     private Set<Resource> downloadRes;
 
     @JsonIgnore
