@@ -4,6 +4,8 @@ import njust.dao.ResourceJpaDao;
 import njust.domain.Resource;
 import njust.service.ResourceService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -31,8 +33,13 @@ public class ResourceServiceImpl implements ResourceService {
     }
 
     @Override
-    public Resource findResourceById(Integer resourceId) {
-        return resourceJpaDao.findOne(resourceId);
+    public Resource findResouceById(Integer resId) {
+        return resourceJpaDao.findOne(resId);
+    }
+
+    @Override
+    public Page<Resource> findResources(Pageable pageable, Integer depId, Integer courseId, Integer type) {
+        return null;
     }
 
     @Override

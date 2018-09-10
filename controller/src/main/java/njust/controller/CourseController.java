@@ -1,41 +1,67 @@
 package njust.controller;
 
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
-import njust.domain.AuctionMsg;
-import njust.domain.Resource;
-import njust.service.CourseService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
+import njust.domain.Course;
+import njust.service.CourseService;
+
+
 @Api(description = "课程业务")
 @RestController
-@RequestMapping(value = "/course")
-public class CourseController {
+@RequestMapping(value = "/coursess")
+public class CourseController
+{
     private CourseService courseService;
 
     @Autowired
-    public void setCourseService(CourseService courseService) {
+    public void setCourseService(CourseService courseService)
+    {
         this.courseService = courseService;
     }
 
+    // @ApiOperation(value = "获取资料")
+    // @GetMapping
+    // public ResponseEntity<List<Resource>> getAuctionMsgs(@ApiParam("课程Id")
+    // @RequestParam("courseId") Integer courseId,
+    // @ApiParam("院系Id")@RequestParam("depId") Integer depId,
+    // @RequestParam(required = false,defaultValue = "") Integer type){
+    // return null;
+    // }
 
-    @ApiOperation(value = "根据课程和类型查找资料")
-    @GetMapping(value = "/{courseId}/type/{type}")
-    public ResponseEntity<List<Resource>> getAuctionMsgs(@PathVariable("courseId") Integer courseId,
-                                                         @PathVariable("type") Integer type){
+    /**
+     * 若前端传入的查询参数为空，则分页查出库内的课程信息,默认每页10条信息，按课程号降序排列 如果传入了查询参数，根据参数筛选出课程信息
+     * 
+     * @param courseId
+     * @param depId
+     * @return
+     */
+    @ApiOperation(value = "获取课程")
+    @GetMapping
+    public ResponseEntity<List<Course>> getCourses(@PageableDefault(size = 10, sort = {
+        "courseId"}, direction = Sort.Direction.DESC) Pageable pageable,
+                                                   @ApiParam("课程Id") @RequestParam(value = "courseId", required = false, defaultValue = "") Integer courseId,
+                                                   @ApiParam("课程所属的院系Id") @RequestParam(value = "depId", required = false, defaultValue = "") Integer depId)
+    {
         return null;
     }
-
-    @ApiOperation(value = "获取一门课的全部资料")
-    @GetMapping(value = "/{courseId}")
-    public ResponseEntity<List<Resource>> getAuctionMsgs(@PathVariable("courseId") Integer courseId){
-        return null;
-    }
+    // @ApiOperation(value = "获取一门课的全部资料")
+    // @GetMapping(value = "/{courseId}")
+    // public ResponseEntity<List<Resource>> getAuctionMsgs(@PathVariable("courseId") Integer
+    // courseId){
+    // return null;
+    // }
 }

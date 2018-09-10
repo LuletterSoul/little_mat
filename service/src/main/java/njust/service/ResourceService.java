@@ -1,12 +1,22 @@
 package njust.service;
 
-import njust.domain.Resource;
 
 import java.util.List;
 
-public interface ResourceService {
+import njust.domain.Resource;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+
+
+public interface ResourceService
+{
     Resource save(Resource resource);
+
     Resource deleteResource(Integer resourceId);
-    Resource findResourceById(Integer resourceId);
+
+    Resource findResouceById(Integer resId);
+
+    Page<Resource> findResources(Pageable pageable, Integer depId, Integer courseId, Integer type);
+
     List<Resource> findAll();
 }

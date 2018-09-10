@@ -14,7 +14,7 @@ import java.util.List;
 
 @Api(description = "学院业务")
 @RestController
-@RequestMapping(value = "/dep")
+@RequestMapping(value = "/deps")
 public class DepartmentController {
 
     private DepartmentService departmentService;
@@ -25,20 +25,20 @@ public class DepartmentController {
     }
 
     @ApiOperation(value="添加课程")
-    @PostMapping(value = "/dep/{depId}/course")
+    @PostMapping(value = "/{depId}/courses")
     public ResponseEntity<Course> createCourse(@PathVariable("depId") Integer depId,
                                                @RequestBody Course course){
         return null;
     }
 
     @ApiOperation(value="添加学院")
-    @PostMapping(value = "/dep")
+    @PostMapping
     public ResponseEntity<Department> createDepartment(@RequestBody Department department){
         return new ResponseEntity<>(departmentService.save(department),HttpStatus.CREATED);
     }
 
-    @ApiOperation(value="获取所有学员")
-    @PostMapping(value = "/dep")
+    @ApiOperation(value="获取所有学院")
+    @GetMapping
     public ResponseEntity<List<Department>> getAllDepartments(){
         return new ResponseEntity<>(departmentService.findAll(),HttpStatus.OK);
     }

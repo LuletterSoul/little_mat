@@ -4,9 +4,9 @@ import njust.dao.AuctionMsgJpaDao;
 import njust.domain.AuctionMsg;
 import njust.service.AuctionMsgService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
 
 @Service
 public class AuctionMsgServiceImpl implements AuctionMsgService {
@@ -36,7 +36,7 @@ public class AuctionMsgServiceImpl implements AuctionMsgService {
     }
 
     @Override
-    public List<AuctionMsg> findAll() {
+    public Page<AuctionMsg> findAll(Pageable pageable, Integer publisherId, Integer status) {
         return auctionMsgJpaDao.findAll();
     }
 }
