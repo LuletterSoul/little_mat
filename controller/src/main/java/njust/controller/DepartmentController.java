@@ -24,11 +24,11 @@ public class DepartmentController {
         this.departmentService = departmentService;
     }
 
-    @ApiOperation(value="添加课程")
-    @PostMapping(value = "/{depId}/courses")
-    public ResponseEntity<Course> createCourse(@PathVariable("depId") Integer depId,
-                                               @RequestBody Course course){
-        return null;
+    @ApiOperation(value="为学院添加某门课程")
+    @PutMapping(value = "/{depId}/courses/{courseId}")
+    public ResponseEntity<Course> addCourse(@PathVariable("depId") Integer depId,
+                                               @PathVariable("courseId") Integer courseId){
+        return new ResponseEntity<>(departmentService.addCourse(depId,courseId),HttpStatus.OK);
     }
 
     @ApiOperation(value="添加学院")

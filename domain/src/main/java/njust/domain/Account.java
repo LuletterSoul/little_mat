@@ -4,10 +4,7 @@ package njust.domain;
 import lombok.Data;
 import org.hibernate.annotations.GenericGenerator;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 @Table(name = "account",schema = "")
 @Entity
@@ -20,5 +17,11 @@ public class Account {
 
     private String username;
     private String password;
+
+    @OneToOne(mappedBy = "account")
+    private User user;
+
+    @OneToOne(mappedBy = "account")
+    private Administrator administrator;
 
 }

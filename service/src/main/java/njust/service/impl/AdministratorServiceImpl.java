@@ -2,14 +2,14 @@ package njust.service.impl;
 
 import njust.dao.AdministratorJpaDao;
 import njust.domain.Administrator;
-import njust.service.AdminstratorService;
+import njust.service.AdministratorService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
-public class AdminstratorServiceImpl implements AdminstratorService {
+public class AdministratorServiceImpl implements AdministratorService {
 
     private AdministratorJpaDao administratorJpaDao;
 

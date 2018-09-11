@@ -37,7 +37,7 @@ public class ResourceController
     @GetMapping(value = "/{resId}")
     public ResponseEntity<Resource> findResourceById(@PathVariable("resId") Integer resId)
     {
-        return new ResponseEntity<>(resourceService.findResouceById(resId), HttpStatus.OK);
+        return new ResponseEntity<>(resourceService.findResourceById(resId), HttpStatus.OK);
     }
 
     @ApiOperation(value = "获取资料")
@@ -56,7 +56,7 @@ public class ResourceController
     @PatchMapping(value = "/{resId}/check")
     public ResponseEntity<Resource> checkResource(@PathVariable("resId") Integer resId)
     {
-        return null;
+        return new ResponseEntity<>(resourceService.checkResource(resId), HttpStatus.OK);
     }
 
     @ApiOperation(value = "修改资源")
@@ -69,15 +69,15 @@ public class ResourceController
 
     @ApiOperation(value = "删除上传资料")
     @DeleteMapping(value = "/{resId}")
-    public ResponseEntity<Resource> updateResource(@PathVariable("resId") Integer resId)
+    public ResponseEntity<Resource> deleteResource(@PathVariable("resId") Integer resId)
     {
-        return null;
+        return new ResponseEntity<>(resourceService.deleteResource(resId), HttpStatus.NO_CONTENT);
     }
 
     @ApiOperation(value = "获取所有待审核资料")
     @GetMapping(value = "/waitCheck")
     public ResponseEntity<List<Resource>> waitCheckResource()
     {
-        return null;
+        return new ResponseEntity<>(resourceService.waitCheckResource(), HttpStatus.OK);
     }
 }

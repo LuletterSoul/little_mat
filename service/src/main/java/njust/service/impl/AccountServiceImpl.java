@@ -1,7 +1,9 @@
 package njust.service.impl;
 
 import njust.dao.AccountJpaDao;
+import njust.dao.UserJpaDao;
 import njust.domain.Account;
+import njust.domain.User;
 import njust.service.AccountService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -13,6 +15,13 @@ import java.util.List;
 public class AccountServiceImpl implements AccountService {
 
     private AccountJpaDao accountJpaDao;
+
+    private UserJpaDao userJpaDao;
+
+    @Autowired
+    public void setUserJpaDao(UserJpaDao userJpaDao) {
+        this.userJpaDao = userJpaDao;
+    }
 
     @Autowired
     public void setAccountJpaDao(AccountJpaDao accountJpaDao) {
@@ -40,4 +49,5 @@ public class AccountServiceImpl implements AccountService {
     public List<Account> findAll() {
         return accountJpaDao.findAll();
     }
+
 }

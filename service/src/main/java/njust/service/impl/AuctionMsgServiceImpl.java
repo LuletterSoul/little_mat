@@ -37,6 +37,10 @@ public class AuctionMsgServiceImpl implements AuctionMsgService {
 
     @Override
     public Page<AuctionMsg> findAll(Pageable pageable, Integer publisherId, Integer status) {
-        return auctionMsgJpaDao.findAll();
+        if(publisherId == null){
+            if(status == null)status = 0;
+            return auctionMsgJpaDao.findAuctionMsgByStatus(status,pageable);
+        }else
+        return null;
     }
 }

@@ -31,11 +31,12 @@ public class UserController {
         return new ResponseEntity<>(userService.save(user),HttpStatus.CREATED);
     }
 
-    @ApiOperation(value = "修改用户信息(待完成)")
+    @ApiOperation(value = "修改用户信息")
     @PutMapping(value = "/{userId}")
     public ResponseEntity<User> modifyUser(@PathVariable Integer userId,
                                            @RequestBody User user){
-        return null;
+
+        return  new ResponseEntity<>(userService.modifyUser( userId, user),HttpStatus.OK);
     }
 
     @ApiOperation(value = "删除用户")
@@ -67,7 +68,7 @@ public class UserController {
     @ApiOperation(value = "获取个人的全部上传资料")
     @GetMapping(value ="/{userId}/uploads")
     public ResponseEntity<List<Resource>> getUploadedResources(@PathVariable("userId") Integer userId){
-        return null;
+        return new ResponseEntity<>(userService.getUploadedResources(userId),HttpStatus.OK);
     }
 
     @ApiOperation(value = "获取个人的全部待审核资料")
@@ -85,38 +86,34 @@ public class UserController {
     @ApiOperation(value = "获取个人的全部下载资料")
     @GetMapping(value = "/{userId}/downloads")
     public ResponseEntity<List<Resource>> getDownloadedResources(@PathVariable("userId") Integer userId){
-        return null;
+        return new ResponseEntity<>(userService.getDownloadedResources(userId),HttpStatus.OK);
     }
 
     @ApiOperation(value = "获取个人的全部拍卖纪录")
     @GetMapping(value = "/{userId}/auction")
-    public ResponseEntity<AuctionMsg> getAuctionMsgs(@PathVariable("userId") Integer userId){
-        return null;
+    public ResponseEntity<List<AuctionMsg>> getAuctionMsgs(@PathVariable("userId") Integer userId)
+    {
+        return new ResponseEntity<>(userService.getAuctionMsgs(userId),HttpStatus.OK);
     }
 
     @ApiOperation(value = "发布拍卖信息")
     @PostMapping(value = "/{userId}/auction")
-    public ResponseEntity<AuctionMsg> getAuctionMsgs(@PathVariable("userId") Integer userId,
-                                                     @RequestBody AuctionMsg auctionMsg){
-        return null;
+    public ResponseEntity<AuctionMsg> createAuctionMsg(@PathVariable("userId") Integer userId,
+                                                       @RequestBody AuctionMsg auctionMsg){
+         return new ResponseEntity<>(userService.createAuctionMsg(userId,auctionMsg),HttpStatus.CREATED);
     }
-
     @ApiOperation(value = "用户修改密码")
-    @PatchMapping(value = "/{userId}/password")
-    public ResponseEntity<User> updatePassword(@PathVariable("userId") Integer userId,
-                                           @RequestBody User user){
-        return null;
+    @PatchMapping(value = "/password")
+    public ResponseEntity<User> updateUserPassword(@RequestParam(value = "userId") Integer userId,
+                                                   @RequestParam(value = "password") String password){
+        return new ResponseEntity<>(userService.updateUserPassword(userId,password),HttpStatus.OK);
     }
 
     @ApiOperation(value = "用户登陆")
     @GetMapping
-    public ResponseEntity<User> loginUser(@RequestBody User user){
+    public ResponseEntity<User> loginUser(@RequestParam(value = "username")String username,
+                                          @RequestParam(value = "password")String password)
+    {
         return null;
     }
-
-
-
-
-
-
 }

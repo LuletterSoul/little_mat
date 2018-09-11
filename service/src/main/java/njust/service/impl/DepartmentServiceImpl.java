@@ -1,6 +1,8 @@
 package njust.service.impl;
 
+import njust.dao.CourseJpaDao;
 import njust.dao.DepartmentJpaDao;
+import njust.domain.Course;
 import njust.domain.Department;
 import njust.service.DepartmentService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +14,13 @@ import java.util.List;
 public class DepartmentServiceImpl implements DepartmentService {
 
     private DepartmentJpaDao departmentJpaDao;
+
+    private CourseJpaDao courseJpaDao;
+
+    @Autowired
+    public void setCourseJpaDao(CourseJpaDao courseJpaDao) {
+        this.courseJpaDao = courseJpaDao;
+    }
 
     @Autowired
     public void setDepartmentJpaDao(DepartmentJpaDao departmentJpaDao) {
@@ -39,4 +48,16 @@ public class DepartmentServiceImpl implements DepartmentService {
     public List<Department> findAll() {
         return departmentJpaDao.findAll();
     }
+
+    @Override
+    public Course addCourse(Integer depId, Integer courseId) {
+        Course course = courseJpaDao.findOne(courseId);
+        Department department = departmentJpaDao.findOne(depId);
+        course.getDepartments().add(department);
+        department.getCourses().add(course);
+        departmentJpaDao.save(department);
+        return course;
+    }
+
+
 }

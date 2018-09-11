@@ -8,6 +8,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -33,7 +34,7 @@ public class ResourceServiceImpl implements ResourceService {
     }
 
     @Override
-    public Resource findResouceById(Integer resId) {
+    public Resource findResourceById(Integer resId) {
         return resourceJpaDao.findOne(resId);
     }
 
@@ -45,5 +46,25 @@ public class ResourceServiceImpl implements ResourceService {
     @Override
     public List<Resource> findAll() {
         return resourceJpaDao.findAll();
+    }
+
+    @Override
+    public Resource checkResource(Integer resId) {
+        Resource resource = resourceJpaDao.findOne(resId);
+        resource.setStatus(1);
+        resourceJpaDao.save(resource);
+        return resource;
+    }
+
+    @Override
+    public List<Resource> waitCheckResource() {
+        List<Resource> list = new ArrayList<>();
+        List<Resource> resources = resourceJpaDao.findAll();
+        for(Resource resource:resources){
+            if(resource.getStatus()==0){
+                list.add(resource);
+            }
+        }
+        return list;
     }
 }

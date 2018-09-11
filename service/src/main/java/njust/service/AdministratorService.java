@@ -4,7 +4,7 @@ import njust.domain.Administrator;
 
 import java.util.List;
 
-public interface AdminstratorService {
+public interface AdministratorService {
     Administrator save(Administrator administrator);
     Administrator deleteAdministrator(Integer administratorId);
     Administrator findAdministratorById(Integer administratorId);

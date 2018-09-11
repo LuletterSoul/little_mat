@@ -1,6 +1,7 @@
 package njust.service;
 
 import njust.domain.Account;
+import njust.domain.User;
 
 import java.util.List;
 

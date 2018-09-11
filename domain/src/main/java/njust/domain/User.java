@@ -37,10 +37,7 @@ public class User{
     private Set<Resource> uploadRes;
 
     @JsonIgnore
-    @ManyToMany(fetch = FetchType.LAZY)
-    @JoinTable(name = "download_res",
-            joinColumns = {@JoinColumn(name = "downloaderId",referencedColumnName = "userId")},
-            inverseJoinColumns = {@JoinColumn(name = "resId",referencedColumnName = "resId")})
+    @ManyToMany(fetch = FetchType.LAZY, mappedBy = "downloaders")
     private Set<Resource> downloadRes;
 
     @JsonIgnore

@@ -67,7 +67,7 @@ public class AuctionMsgController
     }
 
     @ApiOperation(value = "获得某一拍卖信息")
-    @DeleteMapping(value = "/{amsgId}")
+    @GetMapping(value = "/{amsgId}")
     public ResponseEntity<AuctionMsg> getAuctionMsg(@PathVariable("amsgId") Integer amsgId)
     {
         return new ResponseEntity<>(auctionMsgService.findAuctionMsgById(amsgId), HttpStatus.OK);

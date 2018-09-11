@@ -3,15 +3,12 @@ package njust.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import njust.domain.Administrator;
-import njust.service.AdminstratorService;
+import njust.service.AdministratorService;
 
 
 @Api(description = "管理员业务")
@@ -20,17 +17,18 @@ import njust.service.AdminstratorService;
 public class AdministratorController
 {
 
-    private AdminstratorService adminstratorService;
+    private AdministratorService administratorService;
 
     @Autowired
-    public void setAdminstratorService(AdminstratorService adminstratorService)
+    public void setAdministratorService(AdministratorService administratorService)
     {
-        this.adminstratorService = adminstratorService;
+        this.administratorService = administratorService;
     }
 
     @ApiOperation(value = "管理员登陆")
     @GetMapping
-    public ResponseEntity<Administrator> loginUser(@RequestBody Administrator administrator)
+    public ResponseEntity<Administrator> loginAdministrator(@RequestParam(value = "username")String username,
+                                                            @RequestParam(value = "password")String password)
     {
         return null;
     }
