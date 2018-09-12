@@ -22,12 +22,7 @@ import java.util.Map;
  * @description
  * @modified by: 温光照
  */
-@Configuration
-@EnableAspectJAutoProxy(proxyTargetClass = true)
-@EnableJpaRepositories("njust.dao")
-@PropertySource(value = "classpath:hibernate.properties", ignoreResourceNotFound = true)
-@EnableTransactionManagement(proxyTargetClass =true)
-@ComponentScan(basePackages = {"njust"})
+
 public class HibernateConfiguration
 {
 

@@ -1,0 +1,70 @@
+#spring mvc
+spring:
+  jackson:
+    default-property-inclusion: non_null
+    deserialization:
+      accept-empty-array-as-null-object: true
+      accept-empty-string-as-null-object: true
+    time-zone: GMT+8
+    date-format: njust.config.util.ConcurrencyDateFormatter
+  session:
+    store-type: none
+  http:
+    multipart:
+      maxRequestSize: 1024Mb
+      maxFileSize: 1024MB
+#数据库
+  jpa:
+    database: MYSQL
+    # 是否显示HQL
+    show-sql: true
+    properties:
+      hibernate:
+        # 数据库方言
+        dialect: org.hibernate.dialect.MySQL5InnoDBDialect
+        # 是否显示统计信息
+        generate_statistics: flase
+        # Hibernate二级缓存和Query缓存
+        # Spring Boot 整合Hibernate
+        current_session_context_class: org.springframework.orm.hibernate5.SpringSessionContext
+        # 批处理
+        jdbc.batch_size: 50
+    hibernate:
+      ddl-auto: update
+      naming:
+        physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
+    generate-ddl: true
+#数据源
+  datasource:
+    driver-class-name: com.mysql.jdbc.Driver
+    username: root
+    password: root
+    type: com.mchange.v2.c3p0.ComboPooledDataSource
+    url: jdbc:mysql://localhost:3306/little_mat?setUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=true
+    testOnBorrow: true
+    testWhileIdle: true
+    timeBetweenEvictionRunsMillis: 3600000
+    initialPoolSize: 10
+    maxPoolSize: 50
+    minPoolSize: 8
+    maxStatements: 200
+    maxStatementsPerConnection: 200
+    acquireIncrement: 3
+    acquireRetryAttempts: 10
+    autoCommitOnClose: false
+    acquireRetryDelay: 2000
+    maxIdleTimeExcessConnections: 50
+    maxIdleTime: 60
+    idleConnectionTestPeriod: 30
+    breakAfterAcquireFailure: false
+
+
+server:
+  tomcat:
+    basedir: D:/Tomcat
+  port: 8080
+logging:
+  level:
+    com:
+      dm: DEBUG
+

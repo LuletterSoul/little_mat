@@ -1,65 +1,58 @@
 package njust.config;
 
 
-import com.mchange.v2.c3p0.ComboPooledDataSource;
-import org.springframework.context.EnvironmentAware;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.PropertySource;
-import org.springframework.core.env.Environment;
-
-import javax.sql.DataSource;
 import java.beans.PropertyVetoException;
 
+import javax.sql.DataSource;
 
-@Configuration
-@PropertySource(value = "classpath:datasource.properties")
-public class ComboPooledDataSourceConfig implements EnvironmentAware
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.EnableAspectJAutoProxy;
+import org.springframework.context.annotation.PropertySource;
+import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
+import org.springframework.stereotype.Component;
+
+import com.mchange.v2.c3p0.ComboPooledDataSource;
+import org.springframework.transaction.annotation.EnableTransactionManagement;
+
+
+@Component
+public class ComboPooledDataSourceConfig
 
 {
-    private Environment environment;
-
-    public void setEnvironment(Environment environment)
-    {
-        this.environment = environment;
-    }
-
+    @Autowired
     @Bean(name = "dataSource")
-    public DataSource loadDataSource()
+    public DataSource loadDataSource(DataSourceConfig config)
     {
         ComboPooledDataSource dataSource = new ComboPooledDataSource();
-        dataSource.setUser(environment.getProperty("ec.db.username"));
-        dataSource.setPassword(environment.getProperty("ec.db.password"));
-        dataSource.setJdbcUrl(environment.getProperty("ec.db.url"));
+        dataSource.setUser(config.getUsername());
+        dataSource.setPassword(config.getPassword());
+        dataSource.setJdbcUrl(config.getUrl());
         try
         {
-            dataSource.setDriverClass(environment.getProperty("ec.db.driver"));
+            dataSource.setDriverClass(config.getDriverClassName());
         }
         catch (PropertyVetoException e)
         {
             e.printStackTrace();
         }
-        dataSource.setInitialPoolSize(
-            Integer.valueOf(environment.getProperty("ec.db.initialPoolSize")));
-        dataSource.setMaxPoolSize(Integer.valueOf(environment.getProperty("ec.db.maxPoolSize")));
-        dataSource.setMinPoolSize(Integer.valueOf(environment.getProperty("ec.db.minPoolSize")));
-        dataSource.setMaxStatements(
-            Integer.valueOf(environment.getProperty("ec.db.maxStatements")));
+        dataSource.setInitialPoolSize(config.getInitialPoolSize());
+        dataSource.setMaxPoolSize(config.getMaxPoolSize());
+        dataSource.setMinPoolSize(config.getMinPoolSize());
+        dataSource.setMaxStatements(config.getMaxStatements());
         dataSource.setMaxStatementsPerConnection(
-            Integer.valueOf(environment.getProperty("ec.db.maxStatementsPerConnection")));
+                config.getMaxStatementsPerConnection());
         dataSource.setAcquireIncrement(
-            Integer.valueOf(environment.getProperty("ec.db.acquireIncrement")));
+                config.getAcquireIncrement());
         dataSource.setAcquireRetryAttempts(
-            Integer.valueOf(environment.getProperty("ec.db.acquireRetryAttempts")));
+            config.getAcquireRetryAttempts());
         dataSource.setAutoCommitOnClose(
-            Boolean.valueOf(environment.getProperty("ec.db.autoCommitOnClose")));
+            config.isAutoCommitOnClose());
         dataSource.setAcquireRetryDelay(
-            Integer.valueOf(environment.getProperty("ec.db.acquireRetryDelay")));
-        dataSource.setMaxIdleTime(Integer.valueOf(environment.getProperty("ec.db.maxIdleTime")));
-        dataSource.setIdleConnectionTestPeriod(
-            Integer.valueOf(environment.getProperty("ec.db.idleConnectionTestPeriod")));
-        dataSource.setBreakAfterAcquireFailure(
-            Boolean.valueOf(environment.getProperty("ec.db.breakAfterAcquireFailure")));
+            config.getAcquireRetryDelay());
+        dataSource.setMaxIdleTime(config.getMaxIdleTime());
+        dataSource.setBreakAfterAcquireFailure(config.isBreakAfterAcquireFailure());
+        dataSource.setIdleConnectionTestPeriod(config.getIdleConnectionTestPeriod());
         return dataSource;
     }
 }

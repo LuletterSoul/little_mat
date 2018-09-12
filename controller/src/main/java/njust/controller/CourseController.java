@@ -21,7 +21,7 @@ import njust.service.CourseService;
 
 @Api(description = "课程业务")
 @RestController
-@RequestMapping(value = "/coursess")
+@RequestMapping(value = "/courses")
 public class CourseController
 {
     private CourseService courseService;
