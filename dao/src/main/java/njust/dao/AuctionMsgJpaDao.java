@@ -10,9 +10,12 @@ import org.springframework.data.repository.query.Param;
 
 public interface AuctionMsgJpaDao extends JpaRepository<AuctionMsg,Integer> {
 
-    @Query(value="select a from AuctionMsg a where a.status=:status order by ?#{pageable}")
-    Page<AuctionMsg> findAuctionMsgByStatus(@Param("status") Integer status, Pageable pageable);
+//    @Query(value="select a from AuctionMsg a where a.status=:status order by ?#{pageable}")
+    Page<AuctionMsg> findAuctionMsgByStatus(Integer status, Pageable pageable);
 
-    @Query(value="select a from AuctionMsg a where a.publisher=:publisher and a.status=:status order by ?#{pageable}")
-    Page<AuctionMsg> findAuctionMsgByStatusAndAmsgId(@Param("publisher")User publisher, @Param("status") Integer status, Pageable pageable);
+//    @Query(value="select a from AuctionMsg a where a.publisher=:publisher and a.status=:status order by ?#{pageable}")
+    Page<AuctionMsg> findAuctionMsgByStatusAndPublisher(Integer status, User publisher, Pageable pageable);
+
+//    @Query(value = "select a from AuctionMsg a where a.publisher =:publisher order by ?#{pageable}")
+    Page<AuctionMsg> findAuctionMsgByPublisher(User publisher, Pageable pageable);
 }

@@ -17,6 +17,10 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import njust.domain.Resource;
 import njust.service.ResourceService;
+import org.springframework.web.multipart.MultipartFile;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 
 @Api(description = "资源管理业务")
@@ -60,11 +64,10 @@ public class ResourceController
     }
 
     @ApiOperation(value = "修改资源")
-    @PatchMapping(value = "/{resId}/update")
-    public ResponseEntity<Resource> updateResource(@PathVariable("resId") Integer resId,
-                                                   @RequestBody Resource resource)
+    @PatchMapping
+    public ResponseEntity<Resource> updateResource(@RequestBody Resource resource)
     {
-        return null;
+        return new ResponseEntity<>(resourceService.updateResource(resource),HttpStatus.OK);
     }
 
     @ApiOperation(value = "删除上传资料")
@@ -75,9 +78,26 @@ public class ResourceController
     }
 
     @ApiOperation(value = "获取所有待审核资料")
-    @GetMapping(value = "/waitCheck")
-    public ResponseEntity<List<Resource>> waitCheckResource()
+    @GetMapping(value = "/status")
+    public ResponseEntity<Page<Resource>> findResourceByStatus(@PageableDefault(size = 20, sort = {
+            "resId"}, direction = Sort.Direction.DESC) Pageable pageable,
+                                                               @ApiParam("审核状态") @RequestParam(value = "status", required = false, defaultValue = "") Integer status)
     {
-        return new ResponseEntity<>(resourceService.waitCheckResource(), HttpStatus.OK);
+        return new ResponseEntity<>(resourceService.findResourceByStatus(status,pageable), HttpStatus.OK);
+    }
+
+    @ApiOperation(value = "上传资料")
+    @PostMapping(value = "/user/{userId}")
+    public ResponseEntity<Resource> uploadResource(@PathVariable("userId") Integer userId,
+                                                   @RequestBody Resource resource,
+                                                   @RequestParam("file")MultipartFile file, HttpServletRequest request){
+        return new ResponseEntity<>(resourceService.uploadResource(userId,resource,file,request),HttpStatus.OK);
+    }
+
+    @ApiOperation(value = "下载资料")
+    @PostMapping(value = "/{resId}/user/{userId}")
+    public ResponseEntity<Resource> downloadResource(@PathVariable("resId")Integer resId,
+                                                     @PathVariable("userId") Integer userId,HttpServletResponse response){
+        return new ResponseEntity<>(resourceService.downloadResource(resId,userId,response),HttpStatus.OK);
     }
 }

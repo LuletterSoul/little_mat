@@ -15,6 +15,9 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import njust.domain.AuctionMsg;
 import njust.service.AuctionMsgService;
+import org.springframework.web.multipart.MultipartFile;
+
+import javax.servlet.http.HttpServletRequest;
 
 
 @Api(description = "交易业务")
@@ -29,6 +32,14 @@ public class AuctionMsgController
     public void setAuctionMsgService(AuctionMsgService auctionMsgService)
     {
         this.auctionMsgService = auctionMsgService;
+    }
+
+    @ApiOperation(value = "发布拍卖信息")
+    @PostMapping(value = "/user/{userId}")
+    public ResponseEntity<AuctionMsg> createAuctionMsg(@PathVariable("userId") Integer userId,
+                                                       @RequestBody AuctionMsg auctionMsg,
+                                                       @RequestParam("photos")MultipartFile[] photos, HttpServletRequest request){
+        return null;
     }
 
     /**
@@ -63,7 +74,7 @@ public class AuctionMsgController
     @PutMapping
     public ResponseEntity<AuctionMsg> updateAuctionMsg(@RequestBody AuctionMsg auctionMsg)
     {
-        return null;
+        return new ResponseEntity<>(auctionMsgService.updateAuctionMsg(auctionMsg),HttpStatus.OK);
     }
 
     @ApiOperation(value = "获得某一拍卖信息")

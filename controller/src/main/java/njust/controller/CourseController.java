@@ -4,6 +4,7 @@ package njust.controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
@@ -42,19 +43,17 @@ public class CourseController
 
     /**
      * 若前端传入的查询参数为空，则分页查出库内的课程信息,默认每页10条信息，按课程号降序排列 如果传入了查询参数，根据参数筛选出课程信息
-     * 
-     * @param courseId
+     *
      * @param depId
      * @return
      */
     @ApiOperation(value = "获取课程")
     @GetMapping
-    public ResponseEntity<List<Course>> getCourses(@PageableDefault(size = 10, sort = {
+    public ResponseEntity<Page<Course>> findCourses(@PageableDefault(size = 20, sort = {
         "courseId"}, direction = Sort.Direction.DESC) Pageable pageable,
-                                                   @ApiParam("课程Id") @RequestParam(value = "courseId", required = false, defaultValue = "") Integer courseId,
                                                    @ApiParam("课程所属的院系Id") @RequestParam(value = "depId", required = false, defaultValue = "") Integer depId)
     {
-        return null;
+        return new ResponseEntity<>(courseService.findCourse(pageable,depId),HttpStatus.OK);
     }
     // @ApiOperation(value = "获取一门课的全部资料")
     // @GetMapping(value = "/{courseId}")
@@ -66,6 +65,6 @@ public class CourseController
     @ApiOperation(value="添加课程")
     @PostMapping
     public ResponseEntity<Course> createCourse(@RequestBody Course course){
-        return new ResponseEntity<Course>(courseService.save(course),HttpStatus.CREATED);
+        return new ResponseEntity<>(courseService.save(course),HttpStatus.CREATED);
     }
 }

@@ -1,6 +1,8 @@
 package njust.service.impl;
 
+import njust.dao.AccountJpaDao;
 import njust.dao.AdministratorJpaDao;
+import njust.domain.Account;
 import njust.domain.Administrator;
 import njust.service.AdministratorService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +14,12 @@ import java.util.List;
 public class AdministratorServiceImpl implements AdministratorService {
 
     private AdministratorJpaDao administratorJpaDao;
+    private AccountJpaDao accountJpaDao;
+
+    @Autowired
+    public void setAccountJpaDao(AccountJpaDao accountJpaDao) {
+        this.accountJpaDao = accountJpaDao;
+    }
 
     @Autowired
     public void setAdministratorJpaDao(AdministratorJpaDao administratorJpaDao) {
@@ -38,5 +46,12 @@ public class AdministratorServiceImpl implements AdministratorService {
     @Override
     public List<Administrator> findAll() {
         return administratorJpaDao.findAll();
+    }
+
+    @Override
+    public Administrator loginAdministrator(String username, String password) {
+        Account account = accountJpaDao.login(username,password);
+        if(account==null)return null;
+        else return account.getAdministrator();
     }
 }

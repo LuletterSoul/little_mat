@@ -9,4 +9,6 @@ public interface AdministratorService {
     Administrator deleteAdministrator(Integer administratorId);
     Administrator findAdministratorById(Integer administratorId);
     List<Administrator> findAll();
+    Administrator loginAdministrator(String username,String password);
+
 }

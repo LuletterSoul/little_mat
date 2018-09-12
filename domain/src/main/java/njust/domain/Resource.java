@@ -30,7 +30,7 @@ public class Resource
 
     private Integer type;
 
-    private Integer size;
+    private Long size;
 
     private Integer status;
 

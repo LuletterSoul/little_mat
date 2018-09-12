@@ -2,11 +2,17 @@ package njust.controller;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import njust.domain.AuctionMsg;
 import njust.domain.Resource;
 import njust.domain.User;
 import njust.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.repository.query.Param;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -32,11 +38,11 @@ public class UserController {
     }
 
     @ApiOperation(value = "修改用户信息")
-    @PutMapping(value = "/{userId}")
-    public ResponseEntity<User> modifyUser(@PathVariable Integer userId,
-                                           @RequestBody User user){
+    @PutMapping
+    public ResponseEntity<User> updateUser(@RequestBody User user,
+                                           @ApiParam("学院id") @RequestParam(value = "depId", required = false, defaultValue = "") Integer depId){
 
-        return  new ResponseEntity<>(userService.modifyUser( userId, user),HttpStatus.OK);
+        return  new ResponseEntity<>(userService.updateUser(user,depId),HttpStatus.OK);
     }
 
     @ApiOperation(value = "删除用户")
@@ -51,57 +57,44 @@ public class UserController {
         return new ResponseEntity<>(userService.findUserById(userId),HttpStatus.OK);
     }
 
-    @ApiOperation(value = "上传资料")
-    @PostMapping(value = "/{userId}/resource")
-    public ResponseEntity<Resource> uploadResource(@PathVariable("userId") Integer userId,
-                                                   @RequestBody Resource resource){
-        return null;
-    }
 
-    @ApiOperation(value = "下载资料")
-    @PostMapping(value = "/{userId}/resource/{resId}")
-    public ResponseEntity<Resource> downloadResource(@PathVariable("userId") Integer userId,
-                                                     @PathVariable("resId")Integer resId){
-        return null;
-    }
 
     @ApiOperation(value = "获取个人的全部上传资料")
     @GetMapping(value ="/{userId}/uploads")
-    public ResponseEntity<List<Resource>> getUploadedResources(@PathVariable("userId") Integer userId){
-        return new ResponseEntity<>(userService.getUploadedResources(userId),HttpStatus.OK);
+    public ResponseEntity<Page<Resource>> getUploadedResources(@PageableDefault(size = 20, sort = {"amsgId"}, direction = Sort.Direction.DESC)Pageable pageable,
+                                                               @PathVariable("userId") Integer userId){
+        return new ResponseEntity<>(userService.getUploadedResources(userId,pageable),HttpStatus.OK);
     }
 
-    @ApiOperation(value = "获取个人的全部待审核资料")
+/*    @ApiOperation(value = "获取个人的全部待审核资料")
     @GetMapping(value ="/{userId}/waitCheck")
     public ResponseEntity<List<Resource>> getWaitCheckResources(@PathVariable("userId") Integer userId){
         return null;
-    }
+    }*/
 
     @ApiOperation(value = "获取个人的全部已审核资料")
-    @GetMapping(value ="/{userId}/checked")
-    public ResponseEntity<List<Resource>> getCheckedResources(@PathVariable("userId") Integer userId){
+    @GetMapping
+    public ResponseEntity<Page<Resource>> getResources(@PageableDefault(size = 20, sort = {"amsgId"}, direction = Sort.Direction.DESC)Pageable pageable,
+                                                       @Param("userId") Integer userId,@Param("status")Integer status){
         return null;
     }
 
     @ApiOperation(value = "获取个人的全部下载资料")
     @GetMapping(value = "/{userId}/downloads")
-    public ResponseEntity<List<Resource>> getDownloadedResources(@PathVariable("userId") Integer userId){
-        return new ResponseEntity<>(userService.getDownloadedResources(userId),HttpStatus.OK);
+    public ResponseEntity<Page<Resource>> getDownloadedResources(@PageableDefault(size = 20, sort = {"amsgId"}, direction = Sort.Direction.DESC)Pageable pageable,
+                                                                 @PathVariable("userId") Integer userId){
+        return new ResponseEntity<>(userService.getDownloadedResources(userId,pageable),HttpStatus.OK);
     }
 
     @ApiOperation(value = "获取个人的全部拍卖纪录")
     @GetMapping(value = "/{userId}/auction")
-    public ResponseEntity<List<AuctionMsg>> getAuctionMsgs(@PathVariable("userId") Integer userId)
+    public ResponseEntity<Page<AuctionMsg>> getAuctionMsgs(@PageableDefault(size = 20, sort = {"amsgId"}, direction = Sort.Direction.DESC)Pageable pageable,
+                                                           @PathVariable("userId") Integer userId)
     {
-        return new ResponseEntity<>(userService.getAuctionMsgs(userId),HttpStatus.OK);
+        return new ResponseEntity<>(userService.getAuctionMsgs(userId,pageable),HttpStatus.OK);
     }
 
-    @ApiOperation(value = "发布拍卖信息")
-    @PostMapping(value = "/{userId}/auction")
-    public ResponseEntity<AuctionMsg> createAuctionMsg(@PathVariable("userId") Integer userId,
-                                                       @RequestBody AuctionMsg auctionMsg){
-         return new ResponseEntity<>(userService.createAuctionMsg(userId,auctionMsg),HttpStatus.CREATED);
-    }
+
     @ApiOperation(value = "用户修改密码")
     @PatchMapping(value = "/password")
     public ResponseEntity<User> updateUserPassword(@RequestParam(value = "userId") Integer userId,
@@ -110,10 +103,10 @@ public class UserController {
     }
 
     @ApiOperation(value = "用户登陆")
-    @GetMapping
+    @GetMapping(value = "/login")
     public ResponseEntity<User> loginUser(@RequestParam(value = "username")String username,
                                           @RequestParam(value = "password")String password)
     {
-        return null;
+        return new ResponseEntity<>(userService.loginUser(username,password),HttpStatus.OK);
     }
 }

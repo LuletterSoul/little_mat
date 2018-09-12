@@ -6,6 +6,8 @@ import njust.domain.Account;
 import njust.domain.User;
 import njust.service.AccountService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -46,8 +48,8 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
-    public List<Account> findAll() {
-        return accountJpaDao.findAll();
+    public Page<Account> findAll(Pageable pageable) {
+        return accountJpaDao.findAll(pageable);
     }
 
 }

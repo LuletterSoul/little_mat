@@ -6,6 +6,8 @@ import njust.domain.Course;
 import njust.domain.Department;
 import njust.service.DepartmentService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -45,8 +47,8 @@ public class DepartmentServiceImpl implements DepartmentService {
     }
 
     @Override
-    public List<Department> findAll() {
-        return departmentJpaDao.findAll();
+    public Page<Department> findAll(Pageable pageable) {
+        return departmentJpaDao.findAll(pageable);
     }
 
     @Override

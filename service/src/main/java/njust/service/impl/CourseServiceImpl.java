@@ -1,9 +1,13 @@
 package njust.service.impl;
 
 import njust.dao.CourseJpaDao;
+import njust.dao.DepartmentJpaDao;
 import njust.domain.Course;
+import njust.domain.Department;
 import njust.service.CourseService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -12,6 +16,12 @@ import java.util.List;
 public class CourseServiceImpl implements CourseService {
 
     private CourseJpaDao courseJpaDao;
+    private DepartmentJpaDao departmentJpaDao;
+
+    @Autowired
+    public void setDepartmentJpaDao(DepartmentJpaDao departmentJpaDao) {
+        this.departmentJpaDao = departmentJpaDao;
+    }
 
     @Autowired
     public void setCourseJpaDao(CourseJpaDao courseJpaDao) {
@@ -35,8 +45,18 @@ public class CourseServiceImpl implements CourseService {
         return courseJpaDao.findOne(courseId);
     }
 
+//    @Override
+//    public List<Course> findAll() {
+//        return courseJpaDao.findAll();
+//    }
+
     @Override
-    public List<Course> findAll() {
-        return courseJpaDao.findAll();
+    public Page<Course> findCourse(Pageable pageable,Integer depId) {
+        if(depId == null){
+            Department department = departmentJpaDao.findOne(depId);
+            return courseJpaDao.findCoursesByDepartmentsOrderByCourseId(department,pageable);
+        }else{
+            return courseJpaDao.findAll(pageable);
+        }
     }
 }

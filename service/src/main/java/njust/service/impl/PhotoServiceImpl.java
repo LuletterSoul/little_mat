@@ -4,6 +4,8 @@ import njust.dao.PhotoJpaDao;
 import njust.domain.Photo;
 import njust.service.PhotoService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -36,7 +38,7 @@ public class PhotoServiceImpl implements PhotoService {
     }
 
     @Override
-    public List<Photo> findAll() {
-        return photoJpaDao.findAll();
+    public Page<Photo> findAll(Pageable pageable) {
+        return photoJpaDao.findAll(pageable);
     }
 }

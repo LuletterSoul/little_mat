@@ -1,14 +1,11 @@
 package njust.service.impl;
 
-import njust.dao.AccountJpaDao;
-import njust.dao.AuctionMsgJpaDao;
-import njust.dao.UserJpaDao;
-import njust.domain.Account;
-import njust.domain.AuctionMsg;
-import njust.domain.Resource;
-import njust.domain.User;
+import njust.dao.*;
+import njust.domain.*;
 import njust.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -21,6 +18,18 @@ public class UserServiceImpl implements UserService {
     private UserJpaDao userJpaDao;
     private AuctionMsgJpaDao auctionMsgJpaDao;
     private AccountJpaDao accountJpaDao;
+    private ResourceJpaDao resourceJpaDao;
+    private DepartmentJpaDao departmentJpaDao;
+
+    @Autowired
+    public void setDepartmentJpaDao(DepartmentJpaDao departmentJpaDao) {
+        this.departmentJpaDao = departmentJpaDao;
+    }
+
+    @Autowired
+    public void setResourceJpaDao(ResourceJpaDao resourceJpaDao) {
+        this.resourceJpaDao = resourceJpaDao;
+    }
 
     @Autowired
     public void setAuctionMsgJpaDao(AuctionMsgJpaDao auctionMsgJpaDao) {
@@ -55,63 +64,55 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public List<User> findAll() {
-        return userJpaDao.findAll();
+    public Page<User> findAll(Pageable pageable) {
+        return userJpaDao.findAll(pageable);
+    }
+
+//    @Override
+//    public User modifyUser(Integer userId,User u)
+//    {
+//        User user=new User();
+//        user=userJpaDao.findOne(userId);
+//        user.setEmail(u.getEmail());
+//        user.setMajor(u.getMajor());
+//        user.setGrade(u.getGrade());
+//        user.setGender(u.getGender());
+//        user.setName(u.getName());
+//        user.setPhone(u.getPhone());
+//        userJpaDao.save(user);
+//        return user;
+//    }
+
+    @Override
+    public Page<Resource> getUploadedResources(Integer userId,Pageable pageable) {
+        User user=userJpaDao.findOne(userId);
+        return resourceJpaDao.findDownloadResource(userId,pageable);
+    }
+
+//    @Override
+//    public Page<Resource> getWaitCheckResources(Integer userId,Pageable pageable) {
+//        return null;
+//    }
+//
+//    @Override
+//    public Page<Resource> getCheckedResources(Integer userId,Pageable pageable) {
+//        return null;
+//    }
+
+    @Override
+    public Page<Resource> getDownloadedResources(Integer userId,Pageable pageable) {
+        User user=userJpaDao.findOne(userId);
+        return resourceJpaDao.findResourcesByUploader(user,pageable);
     }
 
     @Override
-    public User modifyUser(Integer userId,User u)
-    {
-        User user=new User();
-        user=userJpaDao.findOne(userId);
-        user.setEmail(u.getEmail());
-        user.setMajor(u.getMajor());
-        user.setGrade(u.getGrade());
-        user.setGender(u.getGender());
-        user.setName(u.getName());
-        user.setPhone(u.getPhone());
-        userJpaDao.save(user);
-        return user;
-    }
-
-    @Override
-    public List<Resource> getUploadedResources(Integer userId) {
+    public Page<AuctionMsg> getAuctionMsgs(Integer userId,Pageable pageable) {
         User u=userJpaDao.findOne(userId);
 
-        return  new ArrayList<>(u.getUploadRes()) ;
+        return  null ;
     }
 
-    @Override
-    public List<Resource> getWaitCheckResources(Integer userId) {
-        return null;
-    }
 
-    @Override
-    public List<Resource> getCheckedResources(Integer userId) {
-        return null;
-    }
-
-    @Override
-    public List<Resource> getDownloadedResources(Integer userId) {
-        User u=userJpaDao.findOne(userId);
-
-        return  new ArrayList<>(u.getDownloadRes()) ;
-    }
-
-    @Override
-    public List<AuctionMsg> getAuctionMsgs(Integer userId) {
-        User u=userJpaDao.findOne(userId);
-
-        return  new ArrayList<>(u.getAuctions()) ;
-    }
-
-    @Override
-    public AuctionMsg createAuctionMsg(Integer userId, AuctionMsg auctionMsg) {
-        User u=userJpaDao.findOne(userId);
-        auctionMsgJpaDao.save(auctionMsg);
-       u.getAuctions().add(auctionMsg);
-        return auctionMsg;
-    }
 
     @Override
     public User updateUserPassword(Integer userId, String password) {
@@ -125,8 +126,24 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User loginUser(String username, String password) {
-        return null;
+        Account account = accountJpaDao.login(username,password);
+        if(account==null)return null;
+        else return account.getUser();
     }
 
+    @Override
+    public User updateUser(User user,Integer depId) {
 
+        User user1 = userJpaDao.findOne(user.getUserId());
+        if(depId!=null){
+            user1.setDepartment(departmentJpaDao.findOne(depId));
+        }
+        user1.setName(user.getName());
+        user1.setGender(user.getGender());
+        user1.setMajor(user.getMajor());
+        user1.setPhone(user.getPhone());
+        user1.setEmail(user.getEmail());
+        userJpaDao.save(user1);
+        return user1;
+    }
 }

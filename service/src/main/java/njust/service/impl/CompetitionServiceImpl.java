@@ -4,9 +4,10 @@ import njust.dao.CompetitionJpaDao;
 import njust.domain.Competition;
 import njust.service.CompetitionService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
 
 @Service
 public class CompetitionServiceImpl implements CompetitionService {
@@ -36,7 +37,9 @@ public class CompetitionServiceImpl implements CompetitionService {
     }
 
     @Override
-    public List<Competition> findAll() {
-        return competitionJpaDao.findAll();
+    public Page<Competition> findAll(Pageable pageable) {
+        return competitionJpaDao.findAll(pageable);
     }
+
+
 }

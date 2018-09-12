@@ -2,6 +2,7 @@ package njust.controller;
 
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -30,6 +31,6 @@ public class AdministratorController
     public ResponseEntity<Administrator> loginAdministrator(@RequestParam(value = "username")String username,
                                                             @RequestParam(value = "password")String password)
     {
-        return null;
+        return new ResponseEntity<>(administratorService.loginAdministrator(username,password),HttpStatus.OK);
     }
 }
