@@ -42,6 +42,13 @@ public class Resource
     @JoinColumn(name = "uploaderId")
     private User uploader;
 
+    /**
+     * 审核改资料的管理员
+     */
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "checkerId")
+    private Administrator checker;
+
     @JsonIgnore
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "download_res",

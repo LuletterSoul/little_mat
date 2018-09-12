@@ -72,12 +72,12 @@ public class UserController {
         return null;
     }*/
 
-    @ApiOperation(value = "获取个人的全部已审核资料")
-    @GetMapping
-    public ResponseEntity<Page<Resource>> getResources(@PageableDefault(size = 20, sort = {"amsgId"}, direction = Sort.Direction.DESC)Pageable pageable,
-                                                       @Param("userId") Integer userId,@Param("status")Integer status){
-        return null;
-    }
+//    @ApiOperation(value = "获取个人的全部已审核资料")
+//    @GetMapping
+//    public ResponseEntity<Page<Resource>> getResources(@PageableDefault(size = 20, sort = {"amsgId"}, direction = Sort.Direction.DESC)Pageable pageable,
+//                                                       @Param("userId") Integer userId,@Param("status")Integer status){
+//        return null;
+//    }
 
     @ApiOperation(value = "获取个人的全部下载资料")
     @GetMapping(value = "/{userId}/downloads")
@@ -87,7 +87,7 @@ public class UserController {
     }
 
     @ApiOperation(value = "获取个人的全部拍卖纪录")
-    @GetMapping(value = "/{userId}/auction")
+    @GetMapping(value = "/{userId}/auctions")
     public ResponseEntity<Page<AuctionMsg>> getAuctionMsgs(@PageableDefault(size = 20, sort = {"amsgId"}, direction = Sort.Direction.DESC)Pageable pageable,
                                                            @PathVariable("userId") Integer userId)
     {

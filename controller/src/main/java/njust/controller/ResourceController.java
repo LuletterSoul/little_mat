@@ -46,6 +46,7 @@ public class ResourceController
     @GetMapping
     public ResponseEntity<Page<Resource>> findResourses(@PageableDefault(size = 20, sort = {
         "resId"}, direction = Sort.Direction.DESC) Pageable pageable,
+                                                        @ApiParam("资源的审核者Id") @RequestParam(value = "checkerId",required = false,defaultValue = "") Integer checkerId,
                                                         @ApiParam("资源当前的审核状态") @RequestParam(value = "status",required = false,defaultValue = "") Integer status,
                                                         @ApiParam("资源所属的院系Id") @RequestParam(value = "depId", required = false, defaultValue = "") Integer depId,
                                                         @ApiParam("资源的课程Id") @RequestParam(value = "courseId", required = false, defaultValue = "") Integer courseId,
