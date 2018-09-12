@@ -36,6 +36,7 @@
         </dependency>
     </dependencies>
     <build>
+        <finalName>little-mat</finalName>
         <plugins>
             <plugin>
                 <artifactId>maven-compiler-plugin</artifactId>
