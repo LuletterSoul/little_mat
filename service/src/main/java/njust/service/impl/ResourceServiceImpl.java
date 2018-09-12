@@ -56,7 +56,7 @@ public class ResourceServiceImpl implements ResourceService {
     }
 
     @Override
-    public Page<Resource> findResources(Pageable pageable, Integer depId, Integer courseId, Integer type) {
+    public Page<Resource> findResources(Pageable pageable, Integer status, Integer depId, Integer courseId, Integer type) {
         return null;
     }
 

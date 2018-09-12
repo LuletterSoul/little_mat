@@ -1,8 +1,6 @@
 package njust.controller;
 
 
-import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -48,11 +46,12 @@ public class ResourceController
     @GetMapping
     public ResponseEntity<Page<Resource>> findResourses(@PageableDefault(size = 20, sort = {
         "resId"}, direction = Sort.Direction.DESC) Pageable pageable,
+                                                        @ApiParam("资源当前的审核状态") @RequestParam(value = "status",required = false,defaultValue = "") Integer status,
                                                         @ApiParam("资源所属的院系Id") @RequestParam(value = "depId", required = false, defaultValue = "") Integer depId,
                                                         @ApiParam("资源的课程Id") @RequestParam(value = "courseId", required = false, defaultValue = "") Integer courseId,
                                                         @ApiParam("资源所属的类型") @RequestParam(value = "type", required = false, defaultValue = "") Integer type)
     {
-        return new ResponseEntity<>(resourceService.findResources(pageable, depId, courseId, type),
+        return new ResponseEntity<>(resourceService.findResources(pageable,status , depId, courseId, type),
             HttpStatus.OK);
     }
 
@@ -77,14 +76,14 @@ public class ResourceController
         return new ResponseEntity<>(resourceService.deleteResource(resId), HttpStatus.NO_CONTENT);
     }
 
-    @ApiOperation(value = "获取所有待审核资料")
-    @GetMapping(value = "/status")
-    public ResponseEntity<Page<Resource>> findResourceByStatus(@PageableDefault(size = 20, sort = {
-            "resId"}, direction = Sort.Direction.DESC) Pageable pageable,
-                                                               @ApiParam("审核状态") @RequestParam(value = "status", required = false, defaultValue = "") Integer status)
-    {
-        return new ResponseEntity<>(resourceService.findResourceByStatus(status,pageable), HttpStatus.OK);
-    }
+//    @ApiOperation(value = "获取所有待审核资料")
+//    @GetMapping(value = "/status")
+//    public ResponseEntity<Page<Resource>> findResourceByStatus(@PageableDefault(size = 20, sort = {
+//            "resId"}, direction = Sort.Direction.DESC) Pageable pageable,
+//                                                               @ApiParam("审核状态") @RequestParam(value = "status", required = false, defaultValue = "") Integer status)
+//    {
+//        return new ResponseEntity<>(resourceService.findResourceByStatus(status,pageable), HttpStatus.OK);
+//    }
 
     @ApiOperation(value = "上传资料")
     @PostMapping(value = "/user/{userId}")

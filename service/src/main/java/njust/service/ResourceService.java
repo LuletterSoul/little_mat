@@ -1,15 +1,9 @@
 package njust.service;
 
 
-import java.util.List;
-
-import io.swagger.models.auth.In;
 import njust.domain.Resource;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.repository.query.Param;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
@@ -24,7 +18,7 @@ public interface ResourceService
 
     Resource findResourceById(Integer resId);
 
-    Page<Resource> findResources(Pageable pageable, Integer depId, Integer courseId, Integer type);
+    Page<Resource> findResources(Pageable pageable, Integer status, Integer depId, Integer courseId, Integer type);
 
     Page<Resource> findAll(Pageable pageable);
 
