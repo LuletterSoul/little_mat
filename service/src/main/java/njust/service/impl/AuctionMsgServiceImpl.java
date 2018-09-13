@@ -18,6 +18,7 @@ import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import java.io.File;
 import java.io.IOException;
+import java.util.Set;
 
 @Service
 public class AuctionMsgServiceImpl implements AuctionMsgService {
@@ -49,6 +50,14 @@ public class AuctionMsgServiceImpl implements AuctionMsgService {
     @Override
     public AuctionMsg deleteAuctionMsg(Integer auctionMsgId) {
         AuctionMsg auctionMsg = auctionMsgJpaDao.findOne(auctionMsgId);
+        Set<Photo> photos = auctionMsg.getPhotos();
+        for(Photo photo:photos){
+            File fileTemp = new File(photo.getPhotoPath());
+            if(fileTemp.exists()){
+                fileTemp.delete();
+            }
+            photoJpaDao.delete(photo);
+        }
         auctionMsgJpaDao.delete(auctionMsg);
         return auctionMsg;
     }
@@ -81,6 +90,44 @@ public class AuctionMsgServiceImpl implements AuctionMsgService {
     }
 
     @Override
+    public AuctionMsg updateAuctionMsg(Integer amsgId, String title, String content, Float price, MultipartFile photo, HttpServletRequest request) {
+        AuctionMsg auctionMsg = auctionMsgJpaDao.findOne(amsgId);
+        auctionMsg.setTitle(title);
+        auctionMsg.setContent(content);
+        auctionMsg.setPrice(price);
+        Set<Photo> photos = auctionMsg.getPhotos();
+        auctionMsgJpaDao.save(auctionMsg);
+        Integer userId = auctionMsg.getPublisher().getUserId();
+        File fileTemp;
+        for(Photo photo1:photos){
+            fileTemp = new File(photo1.getPhotoPath());
+            if(fileTemp.exists()){
+                fileTemp.delete();
+            }
+            photoJpaDao.delete(photo1);
+        }
+        Photo photo1 = new Photo();
+        photo1.setAuctionMsg(auctionMsg);
+        String fileName = photo.getOriginalFilename();
+        ServletContext context = request.getServletContext();
+        String relativePath = "\\user\\"+userId+"\\auctionMsg\\"+fileName;
+        System.out.println(relativePath);
+        String realPath = context.getRealPath(relativePath);
+        System.out.println(realPath);
+        try
+        {
+            FileUtils.copyInputStreamToFile(photo.getInputStream(), new File(realPath));
+        }
+        catch (IOException e)
+        {
+            e.printStackTrace();
+        }
+        photo1.setPhotoPath(realPath);
+        photoJpaDao.save(photo1);
+        return auctionMsg;
+    }
+
+    @Override
     public AuctionMsg createAuctionMsg(Integer userId, AuctionMsg auctionMsg, MultipartFile[] photos, HttpServletRequest request) {
         User user = userJpaDao.findOne(userId);
         auctionMsg.setPublisher(user);
@@ -108,6 +155,44 @@ public class AuctionMsgServiceImpl implements AuctionMsgService {
             photo1.setPhotoPath(realPath);
             photoJpaDao.save(photo1);
         }
+        return null;
+    }
+
+    @Override
+    public AuctionMsg createAuctionMsg(Integer userId, String title, String content, Float price, MultipartFile photo, HttpServletRequest request) {
+        User user = userJpaDao.findOne(userId);
+        AuctionMsg auctionMsg = new AuctionMsg();
+        auctionMsg.setStatus(new Integer(0));
+        auctionMsg.setPublisher(user);
+        auctionMsg.setTitle(title);
+        auctionMsg.setContent(content);
+        auctionMsg.setPrice(price);
+        Photo photo1 = new Photo();
+        String fileName = photo.getOriginalFilename();
+        ServletContext context = request.getServletContext();
+        String relativePath = "\\user\\"+userId+"\\auctionMsg\\"+fileName;
+        System.out.println(relativePath);
+        String realPath = context.getRealPath(relativePath);
+        System.out.println(realPath);
+        try
+        {
+            FileUtils.copyInputStreamToFile(photo.getInputStream(), new File(realPath));
+        }
+        catch (IOException e)
+        {
+            e.printStackTrace();
+        }
+
+        photo1.setPhotoPath(realPath);
+        auctionMsg = auctionMsgJpaDao.save(auctionMsg);
+        photo1.setAuctionMsg(auctionMsg);
+        photoJpaDao.save(photo1);
+        return auctionMsg;
+    }
+
+    @Override
+    public AuctionMsg markAuctionMsg(Integer amsgId) {
+        AuctionMsg auctionMsg = auctionMsgJpaDao.findOne(amsgId);
         return null;
     }
 }

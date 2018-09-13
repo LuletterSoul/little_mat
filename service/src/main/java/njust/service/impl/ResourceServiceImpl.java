@@ -1,9 +1,7 @@
 package njust.service.impl;
 
-import njust.dao.ResourceJpaDao;
-import njust.dao.UserJpaDao;
-import njust.domain.Resource;
-import njust.domain.User;
+import njust.dao.*;
+import njust.domain.*;
 import njust.service.ResourceService;
 import org.apache.commons.io.FileUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,12 +19,37 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
+import java.util.Date;
 
 @Service
 public class ResourceServiceImpl implements ResourceService {
 
     private ResourceJpaDao resourceJpaDao;
     private UserJpaDao userJpaDao;
+    private CompetitionJpaDao competitionJpaDao;
+    private CourseJpaDao courseJpaDao;
+    private AdministratorJpaDao administratorJpaDao;
+    private DownloadRecordJpaDao downloadRecordJpaDao;
+
+    @Autowired
+    public void setDownloadRecordJpaDao(DownloadRecordJpaDao downloadRecordJpaDao) {
+        this.downloadRecordJpaDao = downloadRecordJpaDao;
+    }
+
+    @Autowired
+    public void setAdministratorJpaDao(AdministratorJpaDao administratorJpaDao) {
+        this.administratorJpaDao = administratorJpaDao;
+    }
+
+    @Autowired
+    public void setCourseJpaDao(CourseJpaDao courseJpaDao) {
+        this.courseJpaDao = courseJpaDao;
+    }
+
+    @Autowired
+    public void setCompetitionJpaDao(CompetitionJpaDao competitionJpaDao) {
+        this.competitionJpaDao = competitionJpaDao;
+    }
 
     @Autowired
     public void setUserJpaDao(UserJpaDao userJpaDao) {
@@ -46,6 +69,10 @@ public class ResourceServiceImpl implements ResourceService {
     @Override
     public Resource deleteResource(Integer resourceId) {
         Resource resource = resourceJpaDao.findOne(resourceId);
+        File fileTemp = new File(resource.getPath());
+        if(fileTemp.exists()){
+            fileTemp.delete();
+        }
         resourceJpaDao.delete(resource);
         return resource;
     }
@@ -56,9 +83,23 @@ public class ResourceServiceImpl implements ResourceService {
     }
 
     @Override
-    public Page<Resource> findResources(Pageable pageable, Integer status, Integer depId, Integer courseId, Integer type) {
+    public Page<Resource> findResources(Integer checkId,Integer status, Integer comId, Integer courseId, Integer type, Pageable pageable) {
+        if(checkId!=null){
+            return resourceJpaDao.findResourcesByChecker(administratorJpaDao.findOne(checkId),pageable);
+        }
+        else if(comId!=null){
+            return resourceJpaDao.findResourcesByCompetition(competitionJpaDao.findOne(comId),pageable);
+        }
+        else if(courseId!=null){
+            return resourceJpaDao.findResourcesByCourse(courseJpaDao.findOne(courseId),pageable);
+        }
+        else if(status!=null){
+            return resourceJpaDao.findResourceByStatus(status,pageable);
+        }
         return null;
     }
+
+
 
     @Override
     public Page<Resource> findAll(Pageable pageable) {
@@ -66,8 +107,10 @@ public class ResourceServiceImpl implements ResourceService {
     }
 
     @Override
-    public Resource checkResource(Integer resId) {
+    public Resource checkResource(Integer resId,Integer adminId) {
         Resource resource = resourceJpaDao.findOne(resId);
+        Administrator administrator = administratorJpaDao.findOne(adminId);
+        resource.setChecker(administrator);
         resource.setStatus(1);
         resourceJpaDao.save(resource);
         return resource;
@@ -81,14 +124,16 @@ public class ResourceServiceImpl implements ResourceService {
     @Override
     public Resource updateResource(Resource resource) {
         Resource resource1 = resourceJpaDao.findOne(resource.getResId());
-        resource1.setType(resource.getType());
+        resource1.setName(resource.getName());
         resourceJpaDao.save(resource1);
         return resource1;
     }
 
     @Override
-    public Resource uploadResource(Integer userId, Resource resource, MultipartFile multipartFile, HttpServletRequest request) {
+    public Resource uploadResource(Integer userId,Integer comId,Integer courseId, MultipartFile multipartFile, HttpServletRequest request) {
+        Resource resource = new Resource();
         User user = userJpaDao.findOne(userId);
+        resource.setUploader(user);
         String fileName = multipartFile.getOriginalFilename();
         ServletContext context = request.getServletContext();
         String relativePath = "\\user\\"+userId+"\\"+fileName;
@@ -103,6 +148,12 @@ public class ResourceServiceImpl implements ResourceService {
         {
             e.printStackTrace();
         }
+        if(comId!=null){
+            resource.setCompetition(competitionJpaDao.findOne(comId));
+        }
+        if(courseId!=null){
+            resource.setCourse(courseJpaDao.findOne(courseId));
+        }
         resource.setStatus(0);
         resource.setName(fileName);
         resource.setPath(realPath);
@@ -111,13 +162,14 @@ public class ResourceServiceImpl implements ResourceService {
     }
 
     @Override
-    public Resource downloadResource(Integer resId, Integer userId,HttpServletResponse response) {
+    public DownloadRecord downloadResource(Integer resId, Integer userId,HttpServletResponse response) {
         Resource resource = resourceJpaDao.findOne(resId);
         String realPath = resource.getPath();
         String fileName = resource.getName();
         FileInputStream in;
         ServletOutputStream out;
-        response.setHeader("Content-Type","application/x-msdownload");
+        response.setCharacterEncoding("UTF-8");
+        response.setHeader("Content-Type","multipart/form-data");
         try {
             response.setHeader("Content-Disposition","attachment;filename="+ URLEncoder.encode(fileName,"UTF-8"));
         } catch (UnsupportedEncodingException e) {
@@ -136,8 +188,11 @@ public class ResourceServiceImpl implements ResourceService {
         }catch (Throwable e){
             e.printStackTrace();
         }
-        System.out.println(realPath+""+fileName+" "+"下载成功");
-        return resource;
+        DownloadRecord downloadRecord = new DownloadRecord();
+        downloadRecord.setDownloadDate(new Date());
+        downloadRecord.setDownloader(userJpaDao.findOne(userId));
+        downloadRecord.setResource(resource);
+        return downloadRecordJpaDao.save(downloadRecord);
     }
 
 

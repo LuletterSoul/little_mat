@@ -11,4 +11,6 @@ public interface CompetitionService {
     Competition deleteCompetition(Integer competitionId);
     Competition findCompetitionById(Integer competitionId);
     Page<Competition> findAll(Pageable pageable);
+
+    Competition updateCompetition(Integer comId, String comName);
 }

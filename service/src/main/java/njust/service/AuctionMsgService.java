@@ -21,5 +21,11 @@ public interface AuctionMsgService
 
     AuctionMsg updateAuctionMsg(AuctionMsg auctionMsg);
 
+    AuctionMsg updateAuctionMsg(Integer amsgId, String title, String content, Float price, MultipartFile photo, HttpServletRequest request);
+
     AuctionMsg createAuctionMsg(Integer userId, AuctionMsg auctionMsg, MultipartFile[] photos, HttpServletRequest request);
+
+    AuctionMsg createAuctionMsg(Integer userId, String title, String content, Float price, MultipartFile photo, HttpServletRequest request);
+
+    AuctionMsg markAuctionMsg(Integer amsgId);
 }

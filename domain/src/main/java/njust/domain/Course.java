@@ -1,6 +1,7 @@
 package njust.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.google.common.base.Objects;
 import lombok.Data;
 import org.hibernate.annotations.GenericGenerator;
 
@@ -23,6 +24,22 @@ public class Course {
     @ManyToMany(fetch = FetchType.LAZY, mappedBy = "courses")
     private Set<Department> departments;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "course")
     private Set<Resource> resources;
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Course course = (Course) o;
+        return Objects.equal(courseId, course.courseId) &&
+                Objects.equal(courseName, course.courseName) &&
+                Objects.equal(credit, course.credit);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(courseId, courseName, credit);
+    }
 }

@@ -6,6 +6,7 @@ import java.util.Set;
 import javax.persistence.*;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.google.common.base.Objects;
 import org.hibernate.annotations.GenericGenerator;
 
 import lombok.Data;
@@ -49,14 +50,37 @@ public class Resource
     @JoinColumn(name = "checkerId")
     private Administrator checker;
 
-    @JsonIgnore
+/*    @JsonIgnore
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "download_res",
             joinColumns = {@JoinColumn(name = "resId",referencedColumnName = "resId")},
             inverseJoinColumns = {@JoinColumn(name = "downloaderId",referencedColumnName = "userId")})
-    private Set<User> downloaders;
+    private Set<User> downloaders;*/
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "resource")
+    private Set<DownloadRecord> downloadRecords;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "comId")
     private Competition competition;
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Resource resource = (Resource) o;
+        return Objects.equal(resId, resource.resId) &&
+                Objects.equal(name, resource.name) &&
+                Objects.equal(format, resource.format) &&
+                Objects.equal(path, resource.path) &&
+                Objects.equal(type, resource.type) &&
+                Objects.equal(size, resource.size) &&
+                Objects.equal(status, resource.status);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(resId, name, format, path, type, size, status);
+    }
 }

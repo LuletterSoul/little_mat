@@ -1,11 +1,12 @@
 package njust.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
 
-@Table(name = "admin",schema = "")
+@Table(name = "admin")
 @Entity
 @Data
 public class Administrator {

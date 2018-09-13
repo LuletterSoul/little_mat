@@ -1,6 +1,7 @@
 package njust.service;
 
 
+import njust.domain.DownloadRecord;
 import njust.domain.Resource;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -18,17 +19,17 @@ public interface ResourceService
 
     Resource findResourceById(Integer resId);
 
-    Page<Resource> findResources(Pageable pageable, Integer status, Integer depId, Integer courseId, Integer type);
+    Page<Resource> findResources(Integer checkId, Integer status, Integer comId, Integer courseId, Integer type,Pageable pageable);
 
     Page<Resource> findAll(Pageable pageable);
 
-    Resource checkResource(Integer resId);
+    Resource checkResource(Integer resId,Integer adminId);
 
     Page<Resource> findResourceByStatus(Integer status,Pageable pageable);
 
     Resource updateResource(Resource resource);
 
-    Resource uploadResource(Integer userId, Resource resource, MultipartFile multipartFile, HttpServletRequest request);
+    Resource uploadResource(Integer userId,Integer comId,Integer courseId, MultipartFile multipartFile, HttpServletRequest request);
 
-    Resource downloadResource(Integer resId,Integer userId,HttpServletResponse response);
+    DownloadRecord downloadResource(Integer resId, Integer userId, HttpServletResponse response);
 }

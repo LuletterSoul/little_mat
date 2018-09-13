@@ -1,5 +1,6 @@
 package njust.domain;
 
+import com.google.common.base.Objects;
 import lombok.Data;
 import org.hibernate.annotations.GenericGenerator;
 
@@ -20,4 +21,18 @@ public class Photo {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="amsgId")
     private AuctionMsg auctionMsg;
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Photo photo = (Photo) o;
+        return Objects.equal(photoId, photo.photoId) &&
+                Objects.equal(photoPath, photo.photoPath);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(photoId, photoPath);
+    }
 }

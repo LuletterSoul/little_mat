@@ -28,20 +28,20 @@ public class DepartmentController {
         this.departmentService = departmentService;
     }
 
-    @ApiOperation(value="为学院添加某门课程")
+    @ApiOperation(value="为学院添加某门课程（测试通过）")
     @PutMapping(value = "/{depId}/courses/{courseId}")
     public ResponseEntity<Course> addCourse(@PathVariable("depId") Integer depId,
-                                               @PathVariable("courseId") Integer courseId){
+                                            @PathVariable("courseId") Integer courseId){
         return new ResponseEntity<>(departmentService.addCourse(depId,courseId),HttpStatus.OK);
     }
 
-    @ApiOperation(value="添加学院")
+    @ApiOperation(value="添加学院（测试通过）")
     @PostMapping
     public ResponseEntity<Department> createDepartment(@RequestBody Department department){
         return new ResponseEntity<>(departmentService.save(department),HttpStatus.CREATED);
     }
 
-    @ApiOperation(value="获取所有学院")
+    @ApiOperation(value="获取所有学院（测试通过）")
     @GetMapping
     public ResponseEntity<Page<Department>> getAllDepartments(@PageableDefault(size = 20, sort = {
             "depId"}, direction = Sort.Direction.DESC) Pageable pageable){

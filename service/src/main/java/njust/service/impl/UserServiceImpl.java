@@ -16,6 +16,12 @@ public class UserServiceImpl implements UserService {
     private AccountJpaDao accountJpaDao;
     private ResourceJpaDao resourceJpaDao;
     private DepartmentJpaDao departmentJpaDao;
+    private DownloadRecordJpaDao downloadRecordJpaDao;
+
+    @Autowired
+    public void setDownloadRecordJpaDao(DownloadRecordJpaDao downloadRecordJpaDao) {
+        this.downloadRecordJpaDao = downloadRecordJpaDao;
+    }
 
     @Autowired
     public void setDepartmentJpaDao(DepartmentJpaDao departmentJpaDao) {
@@ -51,6 +57,7 @@ public class UserServiceImpl implements UserService {
     public User deleteUser(Integer userId) {
         User user = userJpaDao.findOne(userId);
         userJpaDao.delete(user);
+        accountJpaDao.delete(user.getAccount());
         return user;
     }
 
@@ -82,7 +89,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public Page<Resource> getUploadedResources(Integer userId,Pageable pageable) {
         User user=userJpaDao.findOne(userId);
-        return resourceJpaDao.findDownloadResource(userId,pageable);
+        return resourceJpaDao.findResourcesByUploader(user,pageable);
     }
 
 //    @Override
@@ -98,7 +105,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public Page<Resource> getDownloadedResources(Integer userId,Pageable pageable) {
         User user=userJpaDao.findOne(userId);
-        return resourceJpaDao.findResourcesByUploader(user,pageable);
+        return null;
     }
 
     @Override
@@ -141,5 +148,17 @@ public class UserServiceImpl implements UserService {
         user1.setEmail(user.getEmail());
         userJpaDao.save(user1);
         return user1;
+    }
+
+    @Override
+    public User createUser(User user) {
+        Account account = new Account();
+        account.setUsername(user.getAccount().getUsername());
+        account.setPassword(user.getAccount().getPassword());
+        account = accountJpaDao.save(account);
+        user.setAccount(account);
+        user.setDepartment(departmentJpaDao.findOne(user.getDepartment().getDepId()));
+        return userJpaDao.save(user);
+
     }
 }

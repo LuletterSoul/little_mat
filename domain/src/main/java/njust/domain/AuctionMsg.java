@@ -7,6 +7,7 @@ import java.util.Set;
 import javax.persistence.*;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.google.common.base.Objects;
 import org.hibernate.annotations.GenericGenerator;
 
 import lombok.Data;
@@ -44,4 +45,22 @@ public class AuctionMsg
     @JsonIgnore
     @OneToMany(mappedBy = "auctionMsg")
     private Set<Photo> photos;
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        AuctionMsg that = (AuctionMsg) o;
+        return Objects.equal(amsgId, that.amsgId) &&
+                Objects.equal(title, that.title) &&
+                Objects.equal(publicDate, that.publicDate) &&
+                Objects.equal(price, that.price) &&
+                Objects.equal(content, that.content) &&
+                Objects.equal(status, that.status);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(amsgId, title, publicDate, price, content, status);
+    }
 }
