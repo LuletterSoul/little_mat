@@ -47,8 +47,7 @@ public class DownloadRecordServiceImpl implements DownloadRecordService {
         Page<DownloadRecord> downloadRecords;
         if(userId!=null){
             downloadRecords = downloadRecordJpaDao.findDownloadRecordByDownloader(userJpaDao.findOne(userId),pageable);
-        }
-        else if(resourceId!=null){
+        } else if(resourceId!=null){
             downloadRecords = downloadRecordJpaDao.findDownloadRecordByResource(resourceJpaDao.findOne(resourceId),pageable);
         }else{
             downloadRecords = downloadRecordJpaDao.findAll(pageable);
