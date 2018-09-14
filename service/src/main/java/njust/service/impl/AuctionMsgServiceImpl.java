@@ -8,6 +8,7 @@ import njust.domain.Photo;
 import njust.domain.User;
 import njust.service.AuctionMsgService;
 import njust.util.DateUtil;
+import njust.util.FileUtil;
 import org.apache.commons.io.FileUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -100,12 +101,8 @@ public class AuctionMsgServiceImpl implements AuctionMsgService {
         Set<Photo> photos = auctionMsg.getPhotos();
         auctionMsgJpaDao.save(auctionMsg);
         Integer userId = auctionMsg.getPublisher().getUserId();
-        File fileTemp;
         for(Photo photo1:photos){
-            fileTemp = new File(photo1.getPhotoPath());
-            if(fileTemp.exists()){
-                fileTemp.delete();
-            }
+            FileUtil.deleteFile(photo1.getPhotoPath());
             photoJpaDao.delete(photo1);
         }
         Photo photo1 = new Photo();

@@ -55,6 +55,13 @@ public class CourseController
     {
         return new ResponseEntity<>(courseService.findCourse(pageable,depId),HttpStatus.OK);
     }
+
+    @ApiOperation(value = "获取单门课程信息（测试通过）")
+    @GetMapping(value="/{courseId}")
+    public ResponseEntity<Course> findCourses(@PathVariable(value = "courseId") Integer couseId)
+    {
+        return new ResponseEntity<>(courseService.findCourseById(couseId),HttpStatus.OK);
+    }
     // @ApiOperation(value = "获取一门课的全部资料")
     // @GetMapping(value = "/{courseId}")
     // public ResponseEntity<List<Resource>> getAuctionMsgs(@PathVariable("courseId") Integer
@@ -66,5 +73,11 @@ public class CourseController
     @PostMapping
     public ResponseEntity<Course> createCourse(@RequestBody Course course){
         return new ResponseEntity<>(courseService.save(course),HttpStatus.CREATED);
+    }
+
+    @ApiOperation(value="删除课程（测试通过）")
+    @DeleteMapping(value = "/{courseId}")
+    public ResponseEntity<Course> deleteCourse(@PathVariable(value = "courseId") Integer courseId){
+        return new ResponseEntity<>(courseService.deleteCourse(courseId),HttpStatus.NO_CONTENT);
     }
 }

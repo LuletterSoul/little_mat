@@ -6,4 +6,9 @@ import org.springframework.data.domain.Pageable;
 
 public interface DownloadRecordService {
     Page<DownloadRecord> findDownloadRecord(Integer userId, Integer resourceId, Pageable pageable);
+
+
+    Page<DownloadRecord> deleteDownloadRecord(Integer userId, Integer resourceId, Pageable pageable);
+
+    DownloadRecord deleteDownloadRecordById(Integer recordId);
 }

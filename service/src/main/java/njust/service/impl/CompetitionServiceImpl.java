@@ -2,8 +2,10 @@ package njust.service.impl;
 
 import io.swagger.annotations.ApiOperation;
 import njust.dao.CompetitionJpaDao;
+import njust.dao.DownloadRecordJpaDao;
 import njust.dao.ResourceJpaDao;
 import njust.domain.Competition;
+import njust.domain.DownloadRecord;
 import njust.domain.Resource;
 import njust.service.CompetitionService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +22,12 @@ public class CompetitionServiceImpl implements CompetitionService {
 
     private CompetitionJpaDao competitionJpaDao;
     private ResourceJpaDao resourceJpaDao;
+    private DownloadRecordJpaDao downloadRecordJpaDao;
+
+    @Autowired
+    public void setDownloadRecordJpaDao(DownloadRecordJpaDao downloadRecordJpaDao) {
+        this.downloadRecordJpaDao = downloadRecordJpaDao;
+    }
 
     @Autowired
     public void setResourceJpaDao(ResourceJpaDao resourceJpaDao) {
@@ -46,6 +54,7 @@ public class CompetitionServiceImpl implements CompetitionService {
             if(fileTemp.exists()){
                 fileTemp.delete();
             }
+            downloadRecordJpaDao.delete(resource.getDownloadRecords());
             resourceJpaDao.delete(resource);
         }
         competitionJpaDao.delete(competition);

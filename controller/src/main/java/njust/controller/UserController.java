@@ -85,7 +85,7 @@ public class UserController {
         return new ResponseEntity<>(userService.getDownloadedResources(userId,pageable),HttpStatus.OK);
     }*/
 
-    @ApiOperation(value = "获取个人的全部拍卖纪录")
+    @ApiOperation(value = "获取个人的全部拍卖纪录（测试通过）")
     @GetMapping(value = "/{userId}/auctions")
     public ResponseEntity<Page<AuctionMsg>> getAuctionMsgs(@PageableDefault(size = 20, sort = {"amsgId"}, direction = Sort.Direction.DESC)Pageable pageable,
                                                            @PathVariable("userId") Integer userId)

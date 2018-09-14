@@ -100,7 +100,7 @@ public class ResourceServiceImpl implements ResourceService {
         else if(status!=null){
             return resourceJpaDao.findResourceByStatus(status,pageable);
         }
-        return null;
+        return resourceJpaDao.findAll(pageable);
     }
 
 
@@ -162,7 +162,7 @@ public class ResourceServiceImpl implements ResourceService {
         if(comId!=null){
             resource.setCompetition(competitionJpaDao.findOne(comId));
         }
-        if(courseId!=null){
+        else if(courseId!=null){
             resource.setCourse(courseJpaDao.findOne(courseId));
         }
         resource.setStatus(0);
