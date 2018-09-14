@@ -6,7 +6,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
-import org.springframework.data.repository.query.Param;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,7 +20,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.util.concurrent.ThreadFactory;
 
 
 @Api(description = "资源管理业务")
@@ -57,6 +55,17 @@ public class ResourceController
     {
         return new ResponseEntity<>(resourceService.findResources(checkerId, status, comId, courseId ,type,pageable),
             HttpStatus.OK);
+    }
+
+    @ApiOperation(value = "模糊查询资料（测试通过）")
+    @GetMapping(value = "/fuzzy")
+    public ResponseEntity<Page<Resource>> findResourcesFuzzy(@PageableDefault(size = 20, sort = {
+            "resId"}, direction = Sort.Direction.DESC) Pageable pageable,
+                                                        @ApiParam("名字子串") @RequestParam(value = "name") String name,
+                                                        @ApiParam("资源当前的审核状态") @RequestParam(value = "status",required = false,defaultValue = "") Integer status)
+    {
+        return new ResponseEntity<>(resourceService.findResourceByNameContainsAndStatus(name,status,pageable),
+                HttpStatus.OK);
     }
 
     @ApiOperation(value = "资源审核通过（测试通过）")
@@ -100,7 +109,7 @@ public class ResourceController
         return new ResponseEntity<>(resourceService.uploadResource(userId,comId,courseId,file,request),HttpStatus.OK);
     }
 
-    @ApiOperation(value = "下载资料（测试通过 但是下载存在乱码问题）")
+    @ApiOperation(value = "下载资料（测试通过 但是下载可能存在乱码问题(待前端结合测试)）")
     @PostMapping(value = "/{resId}/user/{userId}")
     public ResponseEntity<DownloadRecord> downloadResource(@PathVariable("resId")Integer resId,
                                                            @PathVariable("userId") Integer userId, HttpServletResponse response){

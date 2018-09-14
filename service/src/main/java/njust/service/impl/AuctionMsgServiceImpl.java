@@ -172,7 +172,7 @@ public class AuctionMsgServiceImpl implements AuctionMsgService {
         Photo photo1 = new Photo();
         String fileName = photo.getOriginalFilename();
         ServletContext context = request.getServletContext();
-        String relativePath = "\\user\\"+userId+"\\auctionMsg\\"+fileName.substring(0,fileName.lastIndexOf("."))+"_"+DateUtil.DateToString(new Date(),"yyyy-MM-dd-HH:mm:ss") +fileName.substring(fileName.lastIndexOf("."));
+        String relativePath = "\\user\\"+userId+"\\auctionMsg\\"+fileName.substring(0,fileName.lastIndexOf("."))+"-"+DateUtil.DateToString(new Date(),"yyyy-MM-dd-HH-mm-ss") +fileName.substring(fileName.lastIndexOf("."));
         System.out.println(relativePath);
         String realPath = context.getRealPath(relativePath);
         System.out.println(realPath);

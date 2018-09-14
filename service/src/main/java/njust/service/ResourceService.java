@@ -32,4 +32,7 @@ public interface ResourceService
     Resource uploadResource(Integer userId,Integer comId,Integer courseId, MultipartFile multipartFile, HttpServletRequest request);
 
     DownloadRecord downloadResource(Integer resId, Integer userId, HttpServletResponse response);
+
+    Page<Resource> findResourceByNameContainsAndStatus(String name, Integer status,Pageable pageable);
+
 }
