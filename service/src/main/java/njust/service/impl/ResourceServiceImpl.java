@@ -3,6 +3,7 @@ package njust.service.impl;
 import njust.dao.*;
 import njust.domain.*;
 import njust.service.ResourceService;
+import njust.util.DateUtil;
 import org.apache.commons.io.FileUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -136,7 +137,7 @@ public class ResourceServiceImpl implements ResourceService {
         resource.setUploader(user);
         String fileName = multipartFile.getOriginalFilename();
         ServletContext context = request.getServletContext();
-        String relativePath = "\\user\\"+userId+"\\"+fileName;
+        String relativePath = "\\user\\"+userId+"\\"+fileName.substring(0,fileName.lastIndexOf("."))+"_"+DateUtil.DateToString(new Date(),"yyyy-MM-dd-HH:mm:ss") +fileName.substring(fileName.lastIndexOf("."));
         System.out.println(relativePath);
         String realPath = context.getRealPath(relativePath);
         System.out.println(realPath);

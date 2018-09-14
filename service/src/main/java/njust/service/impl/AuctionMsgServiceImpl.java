@@ -7,6 +7,7 @@ import njust.domain.AuctionMsg;
 import njust.domain.Photo;
 import njust.domain.User;
 import njust.service.AuctionMsgService;
+import njust.util.DateUtil;
 import org.apache.commons.io.FileUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -18,6 +19,7 @@ import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import java.io.File;
 import java.io.IOException;
+import java.util.Date;
 import java.util.Set;
 
 @Service
@@ -170,7 +172,7 @@ public class AuctionMsgServiceImpl implements AuctionMsgService {
         Photo photo1 = new Photo();
         String fileName = photo.getOriginalFilename();
         ServletContext context = request.getServletContext();
-        String relativePath = "\\user\\"+userId+"\\auctionMsg\\"+fileName;
+        String relativePath = "\\user\\"+userId+"\\auctionMsg\\"+fileName.substring(0,fileName.lastIndexOf("."))+"_"+DateUtil.DateToString(new Date(),"yyyy-MM-dd-HH:mm:ss") +fileName.substring(fileName.lastIndexOf("."));
         System.out.println(relativePath);
         String realPath = context.getRealPath(relativePath);
         System.out.println(realPath);
@@ -193,6 +195,7 @@ public class AuctionMsgServiceImpl implements AuctionMsgService {
     @Override
     public AuctionMsg markAuctionMsg(Integer amsgId) {
         AuctionMsg auctionMsg = auctionMsgJpaDao.findOne(amsgId);
-        return null;
+        auctionMsg.setStatus(1);
+        return auctionMsgJpaDao.save(auctionMsg);
     }
 }
