@@ -1,0 +1,1660 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "description": "本文档说明了每个接口返回、接收的字段信息。并且制定相应的规范作为前后端交流的渠道。",
+    "version": "2.0",
+    "title": "little_mat说明文档",
+    "contact": {
+      "name": "little_mat开发团队",
+      "url": "/",
+      "email": "luvletterU@njust.edu.cn"
+    }
+  },
+  "host": "localhost:8080",
+  "basePath": "/",
+  "tags": [
+    {
+      "name": "department-controller",
+      "description": "学院业务"
+    },
+    {
+      "name": "user-controller",
+      "description": "用户业务"
+    },
+    {
+      "name": "administrator-controller",
+      "description": "管理员业务"
+    },
+    {
+      "name": "course-controller",
+      "description": "课程业务"
+    },
+    {
+      "name": "resource-controller",
+      "description": "资源管理业务"
+    },
+    {
+      "name": "auction-msg-controller",
+      "description": "交易业务"
+    }
+  ],
+  "paths": {
+    "/administrators": {
+      "get": {
+        "tags": [
+          "administrator-controller"
+        ],
+        "summary": "管理员登陆",
+        "operationId": "loginAdministratorUsingGET",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "*/*"
+        ],
+        "parameters": [
+          {
+            "name": "username",
+            "in": "query",
+            "description": "username",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "password",
+            "in": "query",
+            "description": "password",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/Administrator"
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      }
+    },
+    "/auction_msgs": {
+      "get": {
+        "tags": [
+          "auction-msg-controller"
+        ],
+        "summary": "获得拍卖信息列表",
+        "operationId": "findAllAuctionMsgUsingGET",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "*/*"
+        ],
+        "parameters": [
+          {
+            "name": "publisherId",
+            "in": "query",
+            "description": "发布者的id",
+            "required": false,
+            "type": "integer",
+            "format": "int32"
+          },
+          {
+            "name": "status",
+            "in": "query",
+            "description": "消息的状态",
+            "required": false,
+            "type": "integer",
+            "format": "int32"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/Page«AuctionMsg»"
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "auction-msg-controller"
+        ],
+        "summary": "更新拍卖信息",
+        "operationId": "updateAuctionMsgUsingPUT",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "*/*"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "auctionMsg",
+            "description": "auctionMsg",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/AuctionMsg"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/AuctionMsg"
+            }
+          },
+          "201": {
+            "description": "Created"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      }
+    },
+    "/auction_msgs/user/{userId}": {
+      "post": {
+        "tags": [
+          "auction-msg-controller"
+        ],
+        "summary": "发布拍卖信息",
+        "operationId": "createAuctionMsgUsingPOST",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "*/*"
+        ],
+        "parameters": [
+          {
+            "name": "userId",
+            "in": "path",
+            "description": "userId",
+            "required": true,
+            "type": "integer",
+            "format": "int32"
+          },
+          {
+            "in": "body",
+            "name": "auctionMsg",
+            "description": "auctionMsg",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/AuctionMsg"
+            }
+          },
+          {
+            "name": "photos",
+            "in": "query",
+            "description": "photos",
+            "required": true,
+            "type": "array",
+            "items": {
+              "type": "file"
+            },
+            "collectionFormat": "multi"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/AuctionMsg"
+            }
+          },
+          "201": {
+            "description": "Created"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      }
+    },
+    "/auction_msgs/{amsgId}": {
+      "get": {
+        "tags": [
+          "auction-msg-controller"
+        ],
+        "summary": "获得某一拍卖信息",
+        "operationId": "getAuctionMsgUsingGET",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "*/*"
+        ],
+        "parameters": [
+          {
+            "name": "amsgId",
+            "in": "path",
+            "description": "amsgId",
+            "required": true,
+            "type": "integer",
+            "format": "int32"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/AuctionMsg"
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "auction-msg-controller"
+        ],
+        "summary": "删除拍卖信息",
+        "operationId": "deleteAuctionMsgUsingDELETE",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "*/*"
+        ],
+        "parameters": [
+          {
+            "name": "amsgId",
+            "in": "path",
+            "description": "amsgId",
+            "required": true,
+            "type": "integer",
+            "format": "int32"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/AuctionMsg"
+            }
+          },
+          "204": {
+            "description": "No Content"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          }
+        }
+      }
+    },
+    "/courses": {
+      "get": {
+        "tags": [
+          "course-controller"
+        ],
+        "summary": "获取课程",
+        "operationId": "findCoursesUsingGET",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "*/*"
+        ],
+        "parameters": [
+          {
+            "name": "depId",
+            "in": "query",
+            "description": "课程所属的院系Id",
+            "required": false,
+            "type": "integer",
+            "format": "int32"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/Page«Course»"
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "course-controller"
+        ],
+        "summary": "添加课程",
+        "operationId": "createCourseUsingPOST",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "*/*"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "course",
+            "description": "course",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/Course"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/Course"
+            }
+          },
+          "201": {
+            "description": "Created"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      }
+    },
+    "/deps": {
+      "get": {
+        "tags": [
+          "department-controller"
+        ],
+        "summary": "获取所有学院",
+        "operationId": "getAllDepartmentsUsingGET",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "*/*"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/Page«Department»"
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "department-controller"
+        ],
+        "summary": "添加学院",
+        "operationId": "createDepartmentUsingPOST",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "*/*"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "department",
+            "description": "department",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/Department"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/Department"
+            }
+          },
+          "201": {
+            "description": "Created"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      }
+    },
+    "/deps/{depId}/courses/{courseId}": {
+      "put": {
+        "tags": [
+          "department-controller"
+        ],
+        "summary": "为学院添加某门课程",
+        "operationId": "addCourseUsingPUT",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "*/*"
+        ],
+        "parameters": [
+          {
+            "name": "depId",
+            "in": "path",
+            "description": "depId",
+            "required": true,
+            "type": "integer",
+            "format": "int32"
+          },
+          {
+            "name": "courseId",
+            "in": "path",
+            "description": "courseId",
+            "required": true,
+            "type": "integer",
+            "format": "int32"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/Course"
+            }
+          },
+          "201": {
+            "description": "Created"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      }
+    },
+    "/resource": {
+      "get": {
+        "tags": [
+          "resource-controller"
+        ],
+        "summary": "获取资料",
+        "operationId": "findResoursesUsingGET",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "*/*"
+        ],
+        "parameters": [
+          {
+            "name": "checkerId",
+            "in": "query",
+            "description": "资源的审核者Id",
+            "required": false,
+            "type": "integer",
+            "format": "int32"
+          },
+          {
+            "name": "status",
+            "in": "query",
+            "description": "资源当前的审核状态",
+            "required": false,
+            "type": "integer",
+            "format": "int32"
+          },
+          {
+            "name": "depId",
+            "in": "query",
+            "description": "资源所属的院系Id",
+            "required": false,
+            "type": "integer",
+            "format": "int32"
+          },
+          {
+            "name": "courseId",
+            "in": "query",
+            "description": "资源的课程Id",
+            "required": false,
+            "type": "integer",
+            "format": "int32"
+          },
+          {
+            "name": "type",
+            "in": "query",
+            "description": "资源所属的类型",
+            "required": false,
+            "type": "integer",
+            "format": "int32"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/Page«Resource»"
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      },
+      "patch": {
+        "tags": [
+          "resource-controller"
+        ],
+        "summary": "修改资源",
+        "operationId": "updateResourceUsingPATCH",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "*/*"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "resource",
+            "description": "resource",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/Resource"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/Resource"
+            }
+          },
+          "204": {
+            "description": "No Content"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          }
+        }
+      }
+    },
+    "/resource/user/{userId}": {
+      "post": {
+        "tags": [
+          "resource-controller"
+        ],
+        "summary": "上传资料",
+        "operationId": "uploadResourceUsingPOST",
+        "consumes": [
+          "multipart/form-data"
+        ],
+        "produces": [
+          "*/*"
+        ],
+        "parameters": [
+          {
+            "name": "userId",
+            "in": "path",
+            "description": "userId",
+            "required": true,
+            "type": "integer",
+            "format": "int32"
+          },
+          {
+            "in": "body",
+            "name": "resource",
+            "description": "resource",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/Resource"
+            }
+          },
+          {
+            "name": "file",
+            "in": "formData",
+            "description": "file",
+            "required": true,
+            "type": "file"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/Resource"
+            }
+          },
+          "201": {
+            "description": "Created"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      }
+    },
+    "/resource/{resId}": {
+      "get": {
+        "tags": [
+          "resource-controller"
+        ],
+        "summary": "获取资源信息",
+        "operationId": "findResourceByIdUsingGET",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "*/*"
+        ],
+        "parameters": [
+          {
+            "name": "resId",
+            "in": "path",
+            "description": "resId",
+            "required": true,
+            "type": "integer",
+            "format": "int32"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/Resource"
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "resource-controller"
+        ],
+        "summary": "删除上传资料",
+        "operationId": "deleteResourceUsingDELETE",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "*/*"
+        ],
+        "parameters": [
+          {
+            "name": "resId",
+            "in": "path",
+            "description": "resId",
+            "required": true,
+            "type": "integer",
+            "format": "int32"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/Resource"
+            }
+          },
+          "204": {
+            "description": "No Content"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          }
+        }
+      }
+    },
+    "/resource/{resId}/check": {
+      "patch": {
+        "tags": [
+          "resource-controller"
+        ],
+        "summary": "资源审核通过",
+        "operationId": "checkResourceUsingPATCH",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "*/*"
+        ],
+        "parameters": [
+          {
+            "name": "resId",
+            "in": "path",
+            "description": "resId",
+            "required": true,
+            "type": "integer",
+            "format": "int32"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/Resource"
+            }
+          },
+          "204": {
+            "description": "No Content"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          }
+        }
+      }
+    },
+    "/resource/{resId}/user/{userId}": {
+      "post": {
+        "tags": [
+          "resource-controller"
+        ],
+        "summary": "下载资料",
+        "operationId": "downloadResourceUsingPOST",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "*/*"
+        ],
+        "parameters": [
+          {
+            "name": "resId",
+            "in": "path",
+            "description": "resId",
+            "required": true,
+            "type": "integer",
+            "format": "int32"
+          },
+          {
+            "name": "userId",
+            "in": "path",
+            "description": "userId",
+            "required": true,
+            "type": "integer",
+            "format": "int32"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/Resource"
+            }
+          },
+          "201": {
+            "description": "Created"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      }
+    },
+    "/user": {
+      "post": {
+        "tags": [
+          "user-controller"
+        ],
+        "summary": "用户注册",
+        "operationId": "registerUserUsingPOST",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "*/*"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "user",
+            "description": "user",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/User"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/User"
+            }
+          },
+          "201": {
+            "description": "Created"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "user-controller"
+        ],
+        "summary": "修改用户信息",
+        "operationId": "updateUserUsingPUT",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "*/*"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "user",
+            "description": "user",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/User"
+            }
+          },
+          {
+            "name": "depId",
+            "in": "query",
+            "description": "学院id",
+            "required": false,
+            "type": "integer",
+            "format": "int32"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/User"
+            }
+          },
+          "201": {
+            "description": "Created"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      }
+    },
+    "/user/login": {
+      "get": {
+        "tags": [
+          "user-controller"
+        ],
+        "summary": "用户登陆",
+        "operationId": "loginUserUsingGET",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "*/*"
+        ],
+        "parameters": [
+          {
+            "name": "username",
+            "in": "query",
+            "description": "username",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "password",
+            "in": "query",
+            "description": "password",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/User"
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      }
+    },
+    "/user/password": {
+      "patch": {
+        "tags": [
+          "user-controller"
+        ],
+        "summary": "用户修改密码",
+        "operationId": "updateUserPasswordUsingPATCH",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "*/*"
+        ],
+        "parameters": [
+          {
+            "name": "userId",
+            "in": "query",
+            "description": "userId",
+            "required": true,
+            "type": "integer",
+            "format": "int32"
+          },
+          {
+            "name": "password",
+            "in": "query",
+            "description": "password",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/User"
+            }
+          },
+          "204": {
+            "description": "No Content"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          }
+        }
+      }
+    },
+    "/user/{userId}": {
+      "delete": {
+        "tags": [
+          "user-controller"
+        ],
+        "summary": "删除用户",
+        "operationId": "deleteUserUsingDELETE",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "*/*"
+        ],
+        "parameters": [
+          {
+            "name": "userId",
+            "in": "path",
+            "description": "userId",
+            "required": true,
+            "type": "integer",
+            "format": "int32"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/User"
+            }
+          },
+          "204": {
+            "description": "No Content"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          }
+        }
+      }
+    },
+    "/user/{userId}/auctions": {
+      "get": {
+        "tags": [
+          "user-controller"
+        ],
+        "summary": "获取个人的全部拍卖纪录",
+        "operationId": "getAuctionMsgsUsingGET",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "*/*"
+        ],
+        "parameters": [
+          {
+            "name": "userId",
+            "in": "path",
+            "description": "userId",
+            "required": true,
+            "type": "integer",
+            "format": "int32"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/Page«AuctionMsg»"
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      }
+    },
+    "/user/{userId}/downloads": {
+      "get": {
+        "tags": [
+          "user-controller"
+        ],
+        "summary": "获取个人的全部下载资料",
+        "operationId": "getDownloadedResourcesUsingGET",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "*/*"
+        ],
+        "parameters": [
+          {
+            "name": "userId",
+            "in": "path",
+            "description": "userId",
+            "required": true,
+            "type": "integer",
+            "format": "int32"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/Page«Resource»"
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      }
+    },
+    "/user/{userId}/info": {
+      "get": {
+        "tags": [
+          "user-controller"
+        ],
+        "summary": "获取用户个人信息",
+        "operationId": "findUserByIdUsingGET",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "*/*"
+        ],
+        "parameters": [
+          {
+            "name": "userId",
+            "in": "path",
+            "description": "userId",
+            "required": true,
+            "type": "integer",
+            "format": "int32"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/User"
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      }
+    },
+    "/user/{userId}/uploads": {
+      "get": {
+        "tags": [
+          "user-controller"
+        ],
+        "summary": "获取个人的全部上传资料",
+        "operationId": "getUploadedResourcesUsingGET",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "*/*"
+        ],
+        "parameters": [
+          {
+            "name": "userId",
+            "in": "path",
+            "description": "userId",
+            "required": true,
+            "type": "integer",
+            "format": "int32"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/Page«Resource»"
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "Account": {
+      "type": "object",
+      "properties": {
+        "accountId": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "administrator": {
+          "$ref": "#/definitions/Administrator"
+        },
+        "password": {
+          "type": "string"
+        },
+        "user": {
+          "$ref": "#/definitions/User"
+        },
+        "username": {
+          "type": "string"
+        }
+      }
+    },
+    "Administrator": {
+      "type": "object",
+      "properties": {
+        "account": {
+          "$ref": "#/definitions/Account"
+        },
+        "adminId": {
+          "type": "integer",
+          "format": "int32"
+        }
+      }
+    },
+    "AuctionMsg": {
+      "type": "object",
+      "properties": {
+        "amsgId": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "content": {
+          "type": "string"
+        },
+        "price": {
+          "type": "number",
+          "format": "float"
+        },
+        "publicDate": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "publisher": {
+          "$ref": "#/definitions/User"
+        },
+        "status": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "title": {
+          "type": "string"
+        }
+      }
+    },
+    "Competition": {
+      "type": "object",
+      "properties": {
+        "comId": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "comName": {
+          "type": "string"
+        }
+      }
+    },
+    "Course": {
+      "type": "object",
+      "properties": {
+        "courseId": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "courseName": {
+          "type": "string"
+        },
+        "credit": {
+          "type": "number",
+          "format": "float"
+        },
+        "resources": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Resource"
+          }
+        }
+      }
+    },
+    "Department": {
+      "type": "object",
+      "properties": {
+        "depId": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "depName": {
+          "type": "string"
+        },
+        "users": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/User"
+          }
+        }
+      }
+    },
+    "Page«AuctionMsg»": {
+      "type": "object",
+      "properties": {
+        "content": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/AuctionMsg"
+          }
+        },
+        "first": {
+          "type": "boolean"
+        },
+        "last": {
+          "type": "boolean"
+        },
+        "number": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "numberOfElements": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "size": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "sort": {
+          "$ref": "#/definitions/Sort"
+        },
+        "totalElements": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "totalPages": {
+          "type": "integer",
+          "format": "int32"
+        }
+      }
+    },
+    "Page«Course»": {
+      "type": "object",
+      "properties": {
+        "content": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Course"
+          }
+        },
+        "first": {
+          "type": "boolean"
+        },
+        "last": {
+          "type": "boolean"
+        },
+        "number": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "numberOfElements": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "size": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "sort": {
+          "$ref": "#/definitions/Sort"
+        },
+        "totalElements": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "totalPages": {
+          "type": "integer",
+          "format": "int32"
+        }
+      }
+    },
+    "Page«Department»": {
+      "type": "object",
+      "properties": {
+        "content": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Department"
+          }
+        },
+        "first": {
+          "type": "boolean"
+        },
+        "last": {
+          "type": "boolean"
+        },
+        "number": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "numberOfElements": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "size": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "sort": {
+          "$ref": "#/definitions/Sort"
+        },
+        "totalElements": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "totalPages": {
+          "type": "integer",
+          "format": "int32"
+        }
+      }
+    },
+    "Page«Resource»": {
+      "type": "object",
+      "properties": {
+        "content": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Resource"
+          }
+        },
+        "first": {
+          "type": "boolean"
+        },
+        "last": {
+          "type": "boolean"
+        },
+        "number": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "numberOfElements": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "size": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "sort": {
+          "$ref": "#/definitions/Sort"
+        },
+        "totalElements": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "totalPages": {
+          "type": "integer",
+          "format": "int32"
+        }
+      }
+    },
+    "Resource": {
+      "type": "object",
+      "properties": {
+        "checker": {
+          "$ref": "#/definitions/Administrator"
+        },
+        "competition": {
+          "$ref": "#/definitions/Competition"
+        },
+        "course": {
+          "$ref": "#/definitions/Course"
+        },
+        "format": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "path": {
+          "type": "string"
+        },
+        "resId": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "size": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "status": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "type": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "uploader": {
+          "$ref": "#/definitions/User"
+        }
+      }
+    },
+    "Sort": {
+      "type": "object"
+    },
+    "User": {
+      "type": "object",
+      "properties": {
+        "account": {
+          "$ref": "#/definitions/Account"
+        },
+        "department": {
+          "$ref": "#/definitions/Department"
+        },
+        "email": {
+          "type": "string"
+        },
+        "gender": {
+          "type": "string"
+        },
+        "grade": {
+          "type": "string"
+        },
+        "major": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "phone": {
+          "type": "string"
+        },
+        "userId": {
+          "type": "integer",
+          "format": "int32"
+        }
+      }
+    }
+  }
+}
