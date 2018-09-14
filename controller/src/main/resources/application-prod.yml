@@ -5,7 +5,7 @@ spring:
       accept-empty-array-as-null-object: true
       accept-empty-string-as-null-object: true
     time-zone: GMT+8
-    date-format: com.vero.dm.util.date.ConcurrencyDateFormatter
+    date-format: njust.config.util.ConcurrencyDateFormatter
   session:
     store-type: none
   http:
@@ -59,13 +59,6 @@ spring:
     idleConnectionTestPeriod: 30
     breakAfterAcquireFailure: false
 
-
-
 server:
   tomcat:
     basedir: /alidata/tomcat
-
-logging:
-  level:
-    com:
-      dm: DEBUG
