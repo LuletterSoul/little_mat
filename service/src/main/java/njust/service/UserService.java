@@ -19,11 +19,13 @@ public interface UserService
 
     Page<User> findAll(Pageable pageable);
 
-    // User modifyUser(Integer userId,User u);
+/*     User modifyUser(Integer userId,User u);
+     List<Resource> getWaitCheckResources( Integer userId);
+     List<Resource> getCheckedResources(Integer userId);*/
+
     Page<Resource> getUploadedResources(Integer userId, Pageable pageable);
 
-    // List<Resource> getWaitCheckResources( Integer userId);
-    // List<Resource> getCheckedResources(Integer userId);
+
     Page<Resource> getDownloadedResources(Integer userId, Pageable pageable);
 
     Page<AuctionMsg> getAuctionMsgs(Integer userId, Pageable pageable);
@@ -33,5 +35,7 @@ public interface UserService
     User loginUser(String username, String password);
 
     User updateUser(User user, Integer depId);
+
+    User createUser(User user);
 
 }

@@ -26,7 +26,7 @@ public class AdministratorController
         this.administratorService = administratorService;
     }
 
-    @ApiOperation(value = "管理员登陆")
+    @ApiOperation(value = "管理员登陆（测试通过）")
     @GetMapping
     public ResponseEntity<Administrator> loginAdministrator(@RequestParam(value = "username")String username,
                                                             @RequestParam(value = "password")String password)

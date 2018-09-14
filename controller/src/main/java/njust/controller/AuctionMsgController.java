@@ -34,12 +34,15 @@ public class AuctionMsgController
         this.auctionMsgService = auctionMsgService;
     }
 
-    @ApiOperation(value = "发布拍卖信息")
+    @ApiOperation(value = "发布拍卖信息（测试通过）")
     @PostMapping(value = "/user/{userId}")
     public ResponseEntity<AuctionMsg> createAuctionMsg(@PathVariable("userId") Integer userId,
-                                                       @RequestBody AuctionMsg auctionMsg,
-                                                       @RequestParam("photos")MultipartFile[] photos, HttpServletRequest request){
-        return null;
+                                                       @RequestParam("title") String title,
+                                                       @RequestParam("content") String content,
+                                                       @RequestParam("price") Float price,
+                                                       @RequestParam("photo")MultipartFile photo,
+                                                       HttpServletRequest request){
+        return new ResponseEntity<>(auctionMsgService.createAuctionMsg(userId,title,content,price,photo,request),HttpStatus.OK);
     }
 
     /**
@@ -51,7 +54,7 @@ public class AuctionMsgController
      *            筛选状态为status的拍卖信息
      * @return
      */
-    @ApiOperation(value = "获得拍卖信息列表")
+    @ApiOperation(value = "获得拍卖信息列表（测试通过）")
     @GetMapping
     public ResponseEntity<Page<AuctionMsg>> findAllAuctionMsg(@PageableDefault(size = 20, sort = {
         "amsgId"}, direction = Sort.Direction.DESC) Pageable pageable,
@@ -62,7 +65,7 @@ public class AuctionMsgController
             HttpStatus.OK);
     }
 
-    @ApiOperation(value = "删除拍卖信息")
+    @ApiOperation(value = "删除拍卖信息（测试通过）")
     @DeleteMapping(value = "/{amsgId}")
     public ResponseEntity<AuctionMsg> deleteAuctionMsg(@PathVariable("amsgId") Integer amsgId)
     {
@@ -70,14 +73,26 @@ public class AuctionMsgController
             HttpStatus.NO_CONTENT);
     }
 
-    @ApiOperation(value = "更新拍卖信息")
+    @ApiOperation(value = "更新拍卖信息（测试通过）")
     @PutMapping
-    public ResponseEntity<AuctionMsg> updateAuctionMsg(@RequestBody AuctionMsg auctionMsg)
+    public ResponseEntity<AuctionMsg> updateAuctionMsg(@RequestParam("amsgId") Integer amsgId,
+                                                       @RequestParam("title") String title,
+                                                       @RequestParam("content") String content,
+                                                       @RequestParam("price") Float price,
+                                                       @RequestParam("photo")MultipartFile photo,
+                                                       HttpServletRequest request)
     {
-        return new ResponseEntity<>(auctionMsgService.updateAuctionMsg(auctionMsg),HttpStatus.OK);
+        return new ResponseEntity<>(auctionMsgService.updateAuctionMsg(amsgId,title,content,price,photo,request),HttpStatus.OK);
     }
 
-    @ApiOperation(value = "获得某一拍卖信息")
+    @ApiOperation(value = "标记已售出拍卖（测试通过）")
+    @PatchMapping(value = "/{amsgId}")
+    public ResponseEntity<AuctionMsg> markAuctionMsg(@PathVariable("amsgId") Integer amsgId)
+    {
+        return new ResponseEntity<>(auctionMsgService.markAuctionMsg(amsgId),HttpStatus.OK);
+    }
+
+    @ApiOperation(value = "获得某一拍卖信息（测试通过）")
     @GetMapping(value = "/{amsgId}")
     public ResponseEntity<AuctionMsg> getAuctionMsg(@PathVariable("amsgId") Integer amsgId)
     {

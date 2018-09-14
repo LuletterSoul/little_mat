@@ -1,6 +1,7 @@
 package njust.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.google.common.base.Objects;
 import lombok.Data;
 import org.hibernate.annotations.GenericGenerator;
 
@@ -24,6 +25,7 @@ public class User{
     private String grade;
     private String major;
 
+
     @OneToOne
     @JoinColumn(name = "accountId")
     private Account account;
@@ -36,11 +38,31 @@ public class User{
     @OneToMany(mappedBy = "uploader")
     private Set<Resource> uploadRes;
 
-    @JsonIgnore
-    @ManyToMany(fetch = FetchType.LAZY, mappedBy = "downloaders")
-    private Set<Resource> downloadRes;
 
     @JsonIgnore
     @OneToMany(mappedBy = "publisher")
     private Set<AuctionMsg> auctions;
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "downloader")
+    private Set<DownloadRecord> downloadRecords;
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        User user = (User) o;
+        return Objects.equal(userId, user.userId) &&
+                Objects.equal(name, user.name) &&
+                Objects.equal(gender, user.gender) &&
+                Objects.equal(email, user.email) &&
+                Objects.equal(phone, user.phone) &&
+                Objects.equal(grade, user.grade) &&
+                Objects.equal(major, user.major);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(userId, name, gender, email, phone, grade, major);
+    }
 }

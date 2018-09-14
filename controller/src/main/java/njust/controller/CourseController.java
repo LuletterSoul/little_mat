@@ -47,7 +47,7 @@ public class CourseController
      * @param depId
      * @return
      */
-    @ApiOperation(value = "获取课程")
+    @ApiOperation(value = "获取课程（测试通过）")
     @GetMapping
     public ResponseEntity<Page<Course>> findCourses(@PageableDefault(size = 20, sort = {
         "courseId"}, direction = Sort.Direction.DESC) Pageable pageable,
@@ -62,7 +62,7 @@ public class CourseController
     // return null;
     // }
 
-    @ApiOperation(value="添加课程")
+    @ApiOperation(value="添加课程（测试通过）")
     @PostMapping
     public ResponseEntity<Course> createCourse(@RequestBody Course course){
         return new ResponseEntity<>(courseService.save(course),HttpStatus.CREATED);

@@ -51,7 +51,11 @@ public class AdministratorServiceImpl implements AdministratorService {
     @Override
     public Administrator loginAdministrator(String username, String password) {
         Account account = accountJpaDao.login(username,password);
-        if(account==null)return null;
+        System.out.println("username:"+username+" password:"+password);
+        if(account==null){
+            System.out.println("not find Account");
+            return null;
+        }
         else return account.getAdministrator();
     }
 }

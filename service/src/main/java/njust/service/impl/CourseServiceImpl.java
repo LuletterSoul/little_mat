@@ -52,7 +52,7 @@ public class CourseServiceImpl implements CourseService {
 
     @Override
     public Page<Course> findCourse(Pageable pageable,Integer depId) {
-        if(depId == null){
+        if(depId != null){
             Department department = departmentJpaDao.findOne(depId);
             return courseJpaDao.findCoursesByDepartmentsOrderByCourseId(department,pageable);
         }else{
