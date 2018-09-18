@@ -4,6 +4,7 @@ import njust.dao.*;
 import njust.domain.*;
 import njust.service.ResourceService;
 import njust.util.DateUtil;
+import njust.util.EncoderUtil;
 import org.apache.commons.io.FileUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -15,12 +16,10 @@ import javax.servlet.ServletContext;
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.UnsupportedEncodingException;
+import java.io.*;
 import java.net.URLEncoder;
 import java.util.Date;
+import java.util.Set;
 
 @Service
 public class ResourceServiceImpl implements ResourceService {
@@ -72,8 +71,12 @@ public class ResourceServiceImpl implements ResourceService {
         Resource resource = resourceJpaDao.findOne(resourceId);
         File fileTemp = new File(resource.getPath());
         if(fileTemp.exists()){
-            fileTemp.delete();
+            if(fileTemp.delete()){
+                System.out.println("Deleted Successfully!");
+            }
         }
+        Set<DownloadRecord> records = resource.getDownloadRecords();
+        downloadRecordJpaDao.delete(records);
         resourceJpaDao.delete(resource);
         return resource;
     }
@@ -97,7 +100,7 @@ public class ResourceServiceImpl implements ResourceService {
         else if(status!=null){
             return resourceJpaDao.findResourceByStatus(status,pageable);
         }
-        return null;
+        return resourceJpaDao.findAll(pageable);
     }
 
 
@@ -136,10 +139,17 @@ public class ResourceServiceImpl implements ResourceService {
         User user = userJpaDao.findOne(userId);
         resource.setUploader(user);
         String fileName = multipartFile.getOriginalFilename();
+
+/*        int fileNum = resourceJpaDao.findResourcesByNameAndUploader(fileName,user).size();
+        if(fileNum!=0){
+            fileName = fileName.substring(0,fileName.lastIndexOf("."))+" ("+fileNum+")"+fileName.substring(fileName.lastIndexOf("."));
+        }*/
+
         ServletContext context = request.getServletContext();
-        String relativePath = "\\user\\"+userId+"\\"+fileName.substring(0,fileName.lastIndexOf("."))+"_"+DateUtil.DateToString(new Date(),"yyyy-MM-dd-HH:mm:ss") +fileName.substring(fileName.lastIndexOf("."));
+        String relativePath = "\\user\\"+userId+"\\"+fileName.substring(0,fileName.lastIndexOf("."))+"-"+DateUtil.DateToString(new Date(),"yyyy-MM-dd-HH-mm-ss") +fileName.substring(fileName.lastIndexOf("."));
         System.out.println(relativePath);
         String realPath = context.getRealPath(relativePath);
+        System.out.println(realPath);
         System.out.println(realPath);
         try
         {
@@ -152,7 +162,7 @@ public class ResourceServiceImpl implements ResourceService {
         if(comId!=null){
             resource.setCompetition(competitionJpaDao.findOne(comId));
         }
-        if(courseId!=null){
+        else if(courseId!=null){
             resource.setCourse(courseJpaDao.findOne(courseId));
         }
         resource.setStatus(0);
@@ -167,21 +177,33 @@ public class ResourceServiceImpl implements ResourceService {
         Resource resource = resourceJpaDao.findOne(resId);
         String realPath = resource.getPath();
         String fileName = resource.getName();
+
+        System.out.println("fileName is "+fileName);
+        String encoder = EncoderUtil.getEncoding(fileName);
+        System.out.println("fileName's encode is "+encoder);
+
         FileInputStream in;
         ServletOutputStream out;
         response.setCharacterEncoding("UTF-8");
-        response.setHeader("Content-Type","multipart/form-data");
+        response.setHeader("Content-Type","application/octet-stream");
         try {
-            response.setHeader("Content-Disposition","attachment;filename="+ URLEncoder.encode(fileName,"UTF-8"));
+//            fileName = URLEncoder.encode(fileName, StandardCharsets.UTF_8.toString());
+            fileName = new String(fileName.getBytes(encoder),"UTF-8");
+            System.out.println("fileName is "+fileName);
+//            response.setHeader("Content-Disposition","attachment;filename="+ fileName);
+            response.setHeader("Content-Disposition", "attachment;filename=" + URLEncoder.encode(fileName,"UTF-8"));
+
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         }
+//        response.setHeader("Content-Disposition","attachment;filename="+ fileName);
         try {
             in = new FileInputStream(realPath);
+
             out = response.getOutputStream();
             int len ;
             byte b[] = new byte[1024];
-            while((len = in.read(b))!=-1 && in!=null){
+            while((len = in.read(b))!=-1){
                 out.write(b,0,len);
             }
             in.close();
@@ -196,5 +218,11 @@ public class ResourceServiceImpl implements ResourceService {
         return downloadRecordJpaDao.save(downloadRecord);
     }
 
-
+    @Override
+    public Page<Resource> findResourceByNameContainsAndStatus(String name,Integer status,Pageable pageable) {
+        if(status ==null){
+            return resourceJpaDao.findResourcesByNameContains(name,pageable);
+        }
+        return resourceJpaDao.findResourcesByNameContainsAndStatus(name,status,pageable);
+    }
 }

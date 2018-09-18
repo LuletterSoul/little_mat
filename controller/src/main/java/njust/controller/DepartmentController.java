@@ -48,4 +48,10 @@ public class DepartmentController {
         return new ResponseEntity<>(departmentService.findAll(pageable),HttpStatus.OK);
     }
 
+    @ApiOperation(value="删除一个学院（测试通过）")
+    @DeleteMapping(value = "/{depId}")
+    public ResponseEntity<Department> deleteDepartments(@PathVariable(value="depId") Integer depId){
+        return new ResponseEntity<>(departmentService.deleteDepartment(depId),HttpStatus.NO_CONTENT);
+    }
+
 }

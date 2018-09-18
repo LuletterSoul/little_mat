@@ -41,4 +41,25 @@ public class DownloadRecordServiceImpl implements DownloadRecordService {
             return downloadRecordJpaDao.findAll(pageable);
         }
     }
+
+    @Override
+    public Page<DownloadRecord> deleteDownloadRecord(Integer userId, Integer resourceId, Pageable pageable) {
+        Page<DownloadRecord> downloadRecords;
+        if(userId!=null){
+            downloadRecords = downloadRecordJpaDao.findDownloadRecordByDownloader(userJpaDao.findOne(userId),pageable);
+        } else if(resourceId!=null){
+            downloadRecords = downloadRecordJpaDao.findDownloadRecordByResource(resourceJpaDao.findOne(resourceId),pageable);
+        }else{
+            downloadRecords = downloadRecordJpaDao.findAll(pageable);
+        }
+        downloadRecordJpaDao.delete(downloadRecords);
+        return downloadRecords;
+    }
+
+    @Override
+    public DownloadRecord deleteDownloadRecordById(Integer recordId) {
+        DownloadRecord record = downloadRecordJpaDao.findOne(recordId);
+        downloadRecordJpaDao.delete(recordId);
+        return record;
+    }
 }

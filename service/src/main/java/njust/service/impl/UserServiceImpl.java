@@ -2,11 +2,15 @@ package njust.service.impl;
 
 import njust.dao.*;
 import njust.domain.*;
+import njust.service.AuctionMsgService;
 import njust.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+
+import java.io.File;
+import java.util.Set;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -17,6 +21,12 @@ public class UserServiceImpl implements UserService {
     private ResourceJpaDao resourceJpaDao;
     private DepartmentJpaDao departmentJpaDao;
     private DownloadRecordJpaDao downloadRecordJpaDao;
+    private PhotoJpaDao photoJpaDao;
+
+    @Autowired
+    public void setPhotoJpaDao(PhotoJpaDao photoJpaDao) {
+        this.photoJpaDao = photoJpaDao;
+    }
 
     @Autowired
     public void setDownloadRecordJpaDao(DownloadRecordJpaDao downloadRecordJpaDao) {
@@ -56,6 +66,26 @@ public class UserServiceImpl implements UserService {
     @Override
     public User deleteUser(Integer userId) {
         User user = userJpaDao.findOne(userId);
+        Set<AuctionMsg> auctionMsgs = user.getAuctions();
+        Set<Photo> photos;
+        File fileTemp;
+        for(AuctionMsg auctionMsg:auctionMsgs){
+            photos = auctionMsg.getPhotos();
+            for(Photo photo:photos){
+                fileTemp = new File(photo.getPhotoPath());
+                if(fileTemp.exists()){
+                    fileTemp.delete();
+                }
+                photoJpaDao.delete(photo);
+            }
+            auctionMsgJpaDao.delete(auctionMsg);
+        }
+        Set<Resource>  resources = user.getUploadRes();
+        for(Resource resource:resources){
+            resource.setUploader(null);
+            resourceJpaDao.save(resource);
+        }
+        downloadRecordJpaDao.delete(user.getDownloadRecords());
         userJpaDao.delete(user);
         accountJpaDao.delete(user.getAccount());
         return user;
@@ -89,6 +119,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public Page<Resource> getUploadedResources(Integer userId,Pageable pageable) {
         User user=userJpaDao.findOne(userId);
+        if(user==null)return null;
         return resourceJpaDao.findResourcesByUploader(user,pageable);
     }
 
@@ -110,9 +141,8 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public Page<AuctionMsg> getAuctionMsgs(Integer userId,Pageable pageable) {
-        User u=userJpaDao.findOne(userId);
-
-        return  null ;
+        User user=userJpaDao.findOne(userId);
+        return  auctionMsgJpaDao.findAuctionMsgByPublisher(user,pageable) ;
     }
 
 

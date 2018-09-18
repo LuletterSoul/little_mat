@@ -2,21 +2,39 @@ package njust.service.impl;
 
 import njust.dao.CourseJpaDao;
 import njust.dao.DepartmentJpaDao;
+import njust.dao.DownloadRecordJpaDao;
+import njust.dao.ResourceJpaDao;
 import njust.domain.Course;
 import njust.domain.Department;
+import njust.domain.DownloadRecord;
+import njust.domain.Resource;
 import njust.service.CourseService;
+import njust.util.FileUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Set;
 
 @Service
 public class CourseServiceImpl implements CourseService {
 
     private CourseJpaDao courseJpaDao;
     private DepartmentJpaDao departmentJpaDao;
+    private ResourceJpaDao resourceJpaDao;
+    private DownloadRecordJpaDao downloadRecordJpaDao;
+
+    @Autowired
+    public void setDownloadRecordJpaDao(DownloadRecordJpaDao downloadRecordJpaDao) {
+        this.downloadRecordJpaDao = downloadRecordJpaDao;
+    }
+
+    @Autowired
+    public void setResourceJpaDao(ResourceJpaDao resourceJpaDao) {
+        this.resourceJpaDao = resourceJpaDao;
+    }
 
     @Autowired
     public void setDepartmentJpaDao(DepartmentJpaDao departmentJpaDao) {
@@ -36,6 +54,17 @@ public class CourseServiceImpl implements CourseService {
     @Override
     public Course deleteCourse(Integer courseId) {
         Course course = courseJpaDao.findOne(courseId);
+        Set<Resource> resources = course.getResources();
+        for(Resource resource:resources){
+            FileUtil.deleteFile(resource.getPath());
+            downloadRecordJpaDao.delete(resource.getDownloadRecords());
+            resourceJpaDao.delete(resource);
+        }
+        Set<Department> departments = course.getDepartments();
+        for(Department department:departments){
+            department.getCourses().remove(course);
+            departmentJpaDao.save(department);
+        }
         courseJpaDao.delete(course);
         return course;
     }
