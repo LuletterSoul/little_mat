@@ -40,4 +40,11 @@ public class AccountController
     {
         return new ResponseEntity<>(accountService.findAll(pageable),HttpStatus.OK);
     }
+
+    @ApiOperation(value = "单独删除账户的接口不级联（测试通过）")
+    @DeleteMapping(value = "/{accountId}")
+    public ResponseEntity<Account> findAllAccount(@PathVariable(value = "accountId")Integer accountId)
+    {
+        return new ResponseEntity<>(accountService.deleteAccount(accountId),HttpStatus.NO_CONTENT);
+    }
 }

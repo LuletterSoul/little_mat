@@ -191,4 +191,9 @@ public class UserServiceImpl implements UserService {
         return userJpaDao.save(user);
 
     }
+
+    @Override
+    public Page<User> findAllUser(Pageable pageable) {
+        return userJpaDao.findAll(pageable);
+    }
 }

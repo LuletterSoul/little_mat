@@ -51,6 +51,12 @@ public class UserController {
         return new ResponseEntity<>(userService.deleteUser(userId),HttpStatus.NO_CONTENT);
     }
 
+    @ApiOperation(value = "获取全部用户信息（测试通过）")
+    @GetMapping
+    public ResponseEntity<Page<User>> findAllUser(@PageableDefault(size = 20, sort = {"userId"}, direction = Sort.Direction.DESC)Pageable pageable){
+        return new ResponseEntity<>(userService.findAllUser(pageable),HttpStatus.OK);
+    }
+
     @ApiOperation(value = "获取用户个人信息（测试通过）")
     @GetMapping(value = "/{userId}/info")
     public ResponseEntity<User> findUserById(@PathVariable("userId") Integer userId){
