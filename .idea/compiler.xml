@@ -14,7 +14,7 @@
         <module name="util" />
       </profile>
     </annotationProcessing>
-    <bytecodeTargetLevel target="8">
+    <bytecodeTargetLevel>
       <module name="controller" target="1.8" />
       <module name="dao" target="1.8" />
       <module name="domain" target="1.8" />

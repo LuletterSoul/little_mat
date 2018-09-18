@@ -1,5 +1,6 @@
 package njust.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.google.common.base.Objects;
 import lombok.Data;
 import org.hibernate.annotations.GenericGenerator;
@@ -18,6 +19,7 @@ public class Photo {
     private Integer photoId;
     private String photoPath;
 
+    @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="amsgId")
     private AuctionMsg auctionMsg;

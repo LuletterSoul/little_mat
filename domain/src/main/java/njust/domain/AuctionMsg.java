@@ -42,7 +42,7 @@ public class AuctionMsg
     @JoinColumn(name = "publisherId")
     private User publisher;
 
-    @JsonIgnore
+
     @OneToMany(mappedBy = "auctionMsg")
     private Set<Photo> photos;
 
