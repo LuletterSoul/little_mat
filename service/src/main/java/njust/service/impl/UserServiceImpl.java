@@ -187,7 +187,7 @@ public class UserServiceImpl implements UserService {
         account.setPassword(user.getAccount().getPassword());
         account = accountJpaDao.save(account);
         user.setAccount(account);
-        user.setDepartment(departmentJpaDao.findOne(user.getDepartment().getDepId()));
+        //user.setDepartment(departmentJpaDao.findOne(user.getDepartment().getDepId()));
         return userJpaDao.save(user);
 
     }
