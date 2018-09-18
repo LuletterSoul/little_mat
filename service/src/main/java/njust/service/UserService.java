@@ -38,4 +38,5 @@ public interface UserService
 
     User createUser(User user);
 
+    Page<User> findAllUser(Pageable pageable);
 }
