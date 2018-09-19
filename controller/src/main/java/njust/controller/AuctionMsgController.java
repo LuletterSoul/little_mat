@@ -1,7 +1,6 @@
 package njust.controller;
 
 
-import io.swagger.annotations.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -12,6 +11,9 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import njust.domain.AuctionMsg;
 import njust.service.AuctionMsgService;
 import org.springframework.web.multipart.MultipartFile;
@@ -65,10 +67,6 @@ public class AuctionMsgController
      */
     @ApiOperation(value = "获得拍卖信息列表（测试通过）")
     @GetMapping
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "size", value = "每页数量", dataType = "int", paramType = "query", defaultValue = "20"),
-            @ApiImplicitParam(name = "sort", value = "按某属性排序", dataType = "String", paramType = "query", defaultValue = "amsgId"),
-            @ApiImplicitParam(name = "direction", value = "排序方式", dataType = "String", paramType = "query", defaultValue = "DESC")})
     public ResponseEntity<Page<AuctionMsg>> findAllAuctionMsg(@PageableDefault(size = 20, sort = {
         "amsgId"}, direction = Sort.Direction.DESC) Pageable pageable,
                                                               @ApiParam(value = "发布者的id") @RequestParam(value = "publisherId", required = false) Integer publisherId,

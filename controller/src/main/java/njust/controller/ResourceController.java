@@ -1,7 +1,6 @@
 package njust.controller;
 
 
-import io.swagger.annotations.*;
 import njust.domain.DownloadRecord;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -12,6 +11,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import njust.domain.Resource;
 import njust.service.ResourceService;
 import org.springframework.web.multipart.MultipartFile;
@@ -43,10 +45,6 @@ public class ResourceController
 
     @ApiOperation(value = "获取资料（测试通过）")
     @GetMapping
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "size", value = "每页数量", dataType = "int", paramType = "query", defaultValue = "20"),
-            @ApiImplicitParam(name = "sort", value = "按某属性排序", dataType = "String", paramType = "query", defaultValue = "resId"),
-            @ApiImplicitParam(name = "direction", value = "排序方式", dataType = "String", paramType = "query", defaultValue = "DESC")})
     public ResponseEntity<Page<Resource>> findResources(@PageableDefault(size = 20, sort = {
         "resId"}, direction = Sort.Direction.DESC) Pageable pageable,
                                                         @ApiParam("资源的审核者Id") @RequestParam(value = "checkerId",required = false,defaultValue = "") Integer checkerId,

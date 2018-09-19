@@ -2,8 +2,6 @@ package njust.controller;
 
 
 
-import io.swagger.annotations.ApiImplicitParam;
-import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import njust.domain.Account;
 import njust.domain.Administrator;
@@ -37,10 +35,6 @@ public class AccountController
 
     @ApiOperation(value = "找到全部的账户（测试通过）")
     @GetMapping
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "size", value = "每页数量", dataType = "int", paramType = "query", defaultValue = "20"),
-            @ApiImplicitParam(name = "sort", value = "按某属性排序", dataType = "String", paramType = "query", defaultValue = "accountId"),
-            @ApiImplicitParam(name = "direction", value = "排序方式", dataType = "String", paramType = "query", defaultValue = "DESC")})
     public ResponseEntity<Page<Account>> findAllAccount(@PageableDefault(size = 20, sort = {
             "accountId"}, direction = Sort.Direction.DESC) Pageable pageable)
     {
