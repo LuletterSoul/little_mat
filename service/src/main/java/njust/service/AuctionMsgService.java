@@ -27,5 +27,7 @@ public interface AuctionMsgService
 
     AuctionMsg createAuctionMsg(Integer userId, String title, String content, Float price, MultipartFile photo, HttpServletRequest request);
 
+    Integer uploadAuctionPhoto(Integer amsgId, MultipartFile photo, Integer userId);
+
     AuctionMsg markAuctionMsg(Integer amsgId);
 }

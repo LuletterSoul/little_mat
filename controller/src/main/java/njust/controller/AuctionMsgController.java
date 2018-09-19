@@ -7,6 +7,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -43,6 +44,16 @@ public class AuctionMsgController
                                                        @RequestParam("photo")MultipartFile photo,
                                                        HttpServletRequest request){
         return new ResponseEntity<>(auctionMsgService.createAuctionMsg(userId,title,content,price,photo,request),HttpStatus.OK);
+    }
+
+
+    @ApiOperation(value = "发布拍卖信息（测试通过）")
+    @PostMapping(value = "/{amsgId}/photos",consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<Integer> uploadPhotos(@PathVariable("amsgId") Integer amsgId,
+                                                   @ApiParam(value = "上传者的Id",required = true,defaultValue = "") @RequestParam("userId") Integer userId,
+                                                       @RequestPart("photo")MultipartFile photo,
+                                                       HttpServletRequest request){
+        return new ResponseEntity<>(auctionMsgService.uploadAuctionPhoto(amsgId,photo,userId),HttpStatus.CREATED);
     }
 
     /**

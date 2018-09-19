@@ -7,12 +7,14 @@ import njust.domain.AuctionMsg;
 import njust.domain.Photo;
 import njust.domain.User;
 import njust.service.AuctionMsgService;
+import njust.service.util.PathUtils;
 import njust.util.DateUtil;
 import njust.util.FileUtil;
 import org.apache.commons.io.FileUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.rest.webmvc.config.RepositoryRestConfigurer;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -169,9 +171,12 @@ public class AuctionMsgServiceImpl implements AuctionMsgService {
         Photo photo1 = new Photo();
         String fileName = photo.getOriginalFilename();
         ServletContext context = request.getServletContext();
-        String relativePath = "\\user\\"+userId+"\\auctionMsg\\"+fileName.substring(0,fileName.lastIndexOf("."))+"-"+DateUtil.DateToString(new Date(),"yyyy-MM-dd-HH-mm-ss") +fileName.substring(fileName.lastIndexOf("."));
+        String relativePath = "\\user\\"+userId+"\\auctionMsg";
         System.out.println(relativePath);
-        String realPath = context.getRealPath(relativePath);
+        //String realPath = context.getRealPath(relativePath);
+        String timeableFilename =fileName.substring(0,fileName.lastIndexOf("."))+"-"+DateUtil.DateToString(new Date(),"yyyy-MM-dd-HH-mm-ss") +fileName.substring(fileName.lastIndexOf("."));
+        String realPath = PathUtils.getAbsolutePath(relativePath,timeableFilename);
+       // String realPath = PathUtils.getAbsolutePath(relativePath);
         System.out.println(realPath);
         try
         {
@@ -187,6 +192,32 @@ public class AuctionMsgServiceImpl implements AuctionMsgService {
         photo1.setAuctionMsg(auctionMsg);
         photoJpaDao.save(photo1);
         return auctionMsg;
+    }
+
+    @Override
+    public Integer uploadAuctionPhoto(Integer amsgId, MultipartFile photo, Integer userId) {
+        String fileName = photo.getOriginalFilename();
+        Photo photo1 = new Photo();
+       // String relativePath = "\\user\\"+userId+"\\auctionMsg\\"+fileName.substring(0,fileName.lastIndexOf("."))+"-"+DateUtil.DateToString(new Date(),"yyyy-MM-dd-HH-mm-ss") +fileName.substring(fileName.lastIndexOf("."));
+        String relativePath = "\\user\\"+userId+"\\auctionMsg";
+        System.out.println(relativePath);
+        //String realPath = context.getRealPath(relativePath);
+        String timeableFilename =fileName.substring(0,fileName.lastIndexOf("."))+"-"+DateUtil.DateToString(new Date(),"yyyy-MM-dd-HH-mm-ss") +fileName.substring(fileName.lastIndexOf("."));
+        String realPath = PathUtils.getAbsolutePath(relativePath,timeableFilename);
+        System.out.println(realPath);
+        try
+        {
+            FileUtils.copyInputStreamToFile(photo.getInputStream(), new File(realPath));
+        }
+        catch (IOException e)
+        {
+            e.printStackTrace();
+        }
+        photo1.setPhotoPath(realPath);
+        AuctionMsg msg  = auctionMsgJpaDao.findOne(amsgId);
+        photo1.setAuctionMsg(msg);
+        photoJpaDao.save(photo1);
+        return photo1.getPhotoId();
     }
 
     @Override

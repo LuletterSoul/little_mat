@@ -1,10 +1,20 @@
 package njust.service.impl;
 
-import njust.dao.*;
-import njust.domain.*;
-import njust.service.ResourceService;
-import njust.util.DateUtil;
-import njust.util.EncoderUtil;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
+import java.util.Date;
+import java.util.Set;
+
+import javax.servlet.ServletContext;
+import javax.servlet.ServletOutputStream;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import njust.service.util.DownloadUtils;
+import njust.service.util.PathUtils;
 import org.apache.commons.io.FileUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -12,14 +22,14 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.servlet.ServletContext;
-import javax.servlet.ServletOutputStream;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import java.io.*;
-import java.net.URLEncoder;
-import java.util.Date;
-import java.util.Set;
+import njust.dao.*;
+import njust.domain.Administrator;
+import njust.domain.DownloadRecord;
+import njust.domain.Resource;
+import njust.domain.User;
+import njust.service.ResourceService;
+import njust.util.DateUtil;
+import njust.util.EncoderUtil;
 
 @Service
 public class ResourceServiceImpl implements ResourceService {
@@ -159,10 +169,12 @@ public class ResourceServiceImpl implements ResourceService {
             fileName = fileName.substring(0,fileName.lastIndexOf("."))+" ("+fileNum+")"+fileName.substring(fileName.lastIndexOf("."));
         }*/
 
-        ServletContext context = request.getServletContext();
-        String relativePath = "\\user\\"+userId+"\\"+fileName.substring(0,fileName.lastIndexOf("."))+"-"+DateUtil.DateToString(new Date(),"yyyy-MM-dd-HH-mm-ss") +fileName.substring(fileName.lastIndexOf("."));
+        //ServletContext context = request.getServletContext();
+        String relativePath = "\\user\\"+userId;
+        String timeableFilename = fileName.substring(0, fileName.lastIndexOf(".")) + "-" + DateUtil.DateToString(new Date(), "yyyy-MM-dd-HH-mm-ss") + fileName.substring(fileName.lastIndexOf("."));
         System.out.println(relativePath);
-        String realPath = context.getRealPath(relativePath);
+//        String realPath = context.getRealPath(relativePath);
+        String realPath = PathUtils.getAbsolutePath(relativePath,timeableFilename);
         System.out.println(realPath);
         System.out.println(realPath);
         try
@@ -194,40 +206,41 @@ public class ResourceServiceImpl implements ResourceService {
         Resource resource = resourceJpaDao.findOne(resId);
         String realPath = resource.getPath();
         String fileName = resource.getName();
-
-        System.out.println("fileName is "+fileName);
-        String encoder = EncoderUtil.getEncoding(fileName);
-        System.out.println("fileName's encode is "+encoder);
-
-        FileInputStream in;
-        ServletOutputStream out;
-        response.setCharacterEncoding("UTF-8");
-        response.setHeader("Content-Type","application/octet-stream");
-        try {
-//            fileName = URLEncoder.encode(fileName, StandardCharsets.UTF_8.toString());
-            fileName = new String(fileName.getBytes(encoder),"UTF-8");
-            System.out.println("fileName is "+fileName);
-//            response.setHeader("Content-Disposition","attachment;filename="+ fileName);
-            response.setHeader("Content-Disposition", "attachment;filename=" + URLEncoder.encode(fileName,"UTF-8"));
-
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-        }
-//        response.setHeader("Content-Disposition","attachment;filename="+ fileName);
-        try {
-            in = new FileInputStream(realPath);
-
-            out = response.getOutputStream();
-            int len ;
-            byte b[] = new byte[1024];
-            while((len = in.read(b))!=-1){
-                out.write(b,0,len);
-            }
-            in.close();
-            out.close();
-        }catch (Throwable e){
-            e.printStackTrace();
-        }
+//
+//        System.out.println("fileName is "+fileName);
+//        String encoder = EncoderUtil.getEncoding(fileName);
+//        System.out.println("fileName's encode is "+encoder);
+//
+//        FileInputStream in;
+//        ServletOutputStream out;
+//        response.setCharacterEncoding("UTF-8");
+//        response.setHeader("Content-Type","application/octet-stream");
+//        try {
+////            fileName = URLEncoder.encode(fileName, StandardCharsets.UTF_8.toString());
+//            fileName = new String(fileName.getBytes(encoder),"UTF-8");
+//            System.out.println("fileName is "+fileName);
+////            response.setHeader("Content-Disposition","attachment;filename="+ fileName);
+//            response.setHeader("Content-Disposition", "attachment;filename=" + URLEncoder.encode(fileName,"UTF-8"));
+//
+//        } catch (UnsupportedEncodingException e) {
+//            e.printStackTrace();
+//        }
+////        response.setHeader("Content-Disposition","attachment;filename="+ fileName);
+//        try {
+//            in = new FileInputStream(realPath);
+//
+//            out = response.getOutputStream();
+//            int len ;
+//            byte b[] = new byte[1024];
+//            while((len = in.read(b))!=-1){
+//                out.write(b,0,len);
+//            }
+//            in.close();
+//            out.close();
+//        }catch (Throwable e){
+//            e.printStackTrace();
+//        }
+        DownloadUtils.bigFileDownload(response, realPath, fileName);
         DownloadRecord downloadRecord = new DownloadRecord();
         downloadRecord.setDownloadDate(new Date());
         downloadRecord.setDownloader(userJpaDao.findOne(userId));
