@@ -19,7 +19,13 @@ public interface ResourceJpaDao extends JpaRepository<Resource,Integer> {
 
     Page<Resource> findResourcesByCourse(Course course,Pageable pageable);
 
+    Page<Resource> findResourcesByCourseAndStatus(Course course,Integer status,Pageable pageable);
+
     Page<Resource> findResourcesByCompetition(Competition competition,Pageable pageable);
+
+    Page<Resource> findResourcesByCompetitionAndStatus(Competition competition,Integer status,Pageable pageable);
+
+
 
     Page<Resource> findResourcesByNameContains(String name,Pageable pageable);
 
@@ -28,5 +34,6 @@ public interface ResourceJpaDao extends JpaRepository<Resource,Integer> {
     List<Resource> findResourcesByNameAndUploader(String name,User user);
 
     Page<Resource> findResourcesByTypeAndCourse(Integer type,Course course,Pageable pageable);
+    Page<Resource> findResourcesByTypeAndCourseAndStatus(Integer type,Course course,Integer status,Pageable pageable);
 
 }

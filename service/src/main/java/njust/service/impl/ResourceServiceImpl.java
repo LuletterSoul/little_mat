@@ -92,11 +92,21 @@ public class ResourceServiceImpl implements ResourceService {
             return resourceJpaDao.findResourcesByChecker(administratorJpaDao.findOne(checkId),pageable);
         }
         else if(comId!=null){
+            if(status!=null){
+                return resourceJpaDao.findResourcesByCompetitionAndStatus(competitionJpaDao.findOne(comId),status,pageable);
+            }
             return resourceJpaDao.findResourcesByCompetition(competitionJpaDao.findOne(comId),pageable);
         }
         else if(courseId!=null){
             if(type!=null){
+                if(status!=null){
+                    return resourceJpaDao.findResourcesByTypeAndCourseAndStatus(type,courseJpaDao.findOne(courseId),status,pageable);
+                }
                 return  resourceJpaDao.findResourcesByTypeAndCourse(type,courseJpaDao.findOne(courseId),pageable);
+            }else{
+                if(status!=null){
+                    resourceJpaDao.findResourcesByCourseAndStatus(courseJpaDao.findOne(courseId),status,pageable);
+                }
             }
             return resourceJpaDao.findResourcesByCourse(courseJpaDao.findOne(courseId),pageable);
         }
