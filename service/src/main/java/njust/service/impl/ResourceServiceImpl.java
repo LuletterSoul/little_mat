@@ -132,6 +132,7 @@ public class ResourceServiceImpl implements ResourceService {
     public Resource updateResource(Resource resource) {
         Resource resource1 = resourceJpaDao.findOne(resource.getResId());
         resource1.setName(resource.getName());
+        resource1.setType(resource.getType());
         resourceJpaDao.save(resource1);
         return resource1;
     }
