@@ -2,7 +2,7 @@ package njust.util;
 
 public class EncoderUtil {
     public static String getEncoding(String str) {
-        String encode = "GB2312";
+        String encode = "ISO-8859-1";
         try {
             if (str.equals(new String(str.getBytes(encode), encode))) {
                 String s = encode;
@@ -10,7 +10,7 @@ public class EncoderUtil {
             }
         } catch (Exception exception) {
         }
-        encode = "ISO-8859-1";
+        encode = "UTF-8";
         try {
             if (str.equals(new String(str.getBytes(encode), encode))) {
                 String s1 = encode;
@@ -18,7 +18,7 @@ public class EncoderUtil {
             }
         } catch (Exception exception1) {
         }
-        encode = "UTF-8";
+        encode = "GB2312";
         try {
             if (str.equals(new String(str.getBytes(encode), encode))) {
                 String s2 = encode;
