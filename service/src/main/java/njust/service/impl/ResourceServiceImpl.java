@@ -95,6 +95,9 @@ public class ResourceServiceImpl implements ResourceService {
             return resourceJpaDao.findResourcesByCompetition(competitionJpaDao.findOne(comId),pageable);
         }
         else if(courseId!=null){
+            if(type!=null){
+                return  resourceJpaDao.findResourcesByTypeAndCourse(type,courseJpaDao.findOne(courseId),pageable);
+            }
             return resourceJpaDao.findResourcesByCourse(courseJpaDao.findOne(courseId),pageable);
         }
         else if(status!=null){
@@ -134,7 +137,7 @@ public class ResourceServiceImpl implements ResourceService {
     }
 
     @Override
-    public Resource uploadResource(Integer userId,Integer comId,Integer courseId, MultipartFile multipartFile, HttpServletRequest request) {
+    public Resource uploadResource(Integer userId, Integer comId, Integer courseId, Integer type, HttpServletRequest request, MultipartFile multipartFile) {
         Resource resource = new Resource();
         User user = userJpaDao.findOne(userId);
         resource.setUploader(user);
@@ -164,6 +167,9 @@ public class ResourceServiceImpl implements ResourceService {
         }
         else if(courseId!=null){
             resource.setCourse(courseJpaDao.findOne(courseId));
+        }
+        if(type!=null){
+            resource.setType(type);
         }
         resource.setStatus(0);
         resource.setName(fileName);

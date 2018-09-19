@@ -27,4 +27,6 @@ public interface ResourceJpaDao extends JpaRepository<Resource,Integer> {
 
     List<Resource> findResourcesByNameAndUploader(String name,User user);
 
+    Page<Resource> findResourcesByTypeAndCourse(Integer type,Course course,Pageable pageable);
+
 }

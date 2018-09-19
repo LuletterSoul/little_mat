@@ -29,7 +29,7 @@ public interface ResourceService
 
     Resource updateResource(Resource resource);
 
-    Resource uploadResource(Integer userId,Integer comId,Integer courseId, MultipartFile multipartFile, HttpServletRequest request);
+    Resource uploadResource(Integer userId, Integer comId, Integer courseId, Integer type, HttpServletRequest request, MultipartFile multipartFile);
 
     DownloadRecord downloadResource(Integer resId, Integer userId, HttpServletResponse response);
 

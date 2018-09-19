@@ -104,9 +104,10 @@ public class ResourceController
     public ResponseEntity<Resource> uploadResource(@RequestParam("userId") Integer userId,
                                                    @RequestParam(value ="comId",required = false) Integer comId,
                                                    @RequestParam(value = "courseId",required = false)Integer courseId,
+                                                   @RequestParam(value = "type",required = false)Integer type,
                                                    @RequestParam("file")MultipartFile file,
                                                    HttpServletRequest request){
-        return new ResponseEntity<>(resourceService.uploadResource(userId,comId,courseId,file,request),HttpStatus.OK);
+        return new ResponseEntity<>(resourceService.uploadResource(userId,comId,courseId, type, request, file),HttpStatus.OK);
     }
 
     @ApiOperation(value = "下载资料（测试通过 但是下载可能存在乱码问题(待前端结合测试)）")
