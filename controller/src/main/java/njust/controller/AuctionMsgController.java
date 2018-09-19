@@ -47,7 +47,7 @@ public class AuctionMsgController
     }
 
 
-    @ApiOperation(value = "发布拍卖信息（测试通过）")
+    @ApiOperation(value = "上传拍卖的图片（测试通过）")
     @PostMapping(value = "/{amsgId}/photos",consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<Integer> uploadPhotos(@PathVariable("amsgId") Integer amsgId,
                                                    @ApiParam(value = "上传者的Id",required = true,defaultValue = "") @RequestParam("userId") Integer userId,
