@@ -1,6 +1,8 @@
 package njust.controller;
 
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import njust.domain.DownloadRecord;
 import njust.service.DownloadRecordService;
@@ -26,6 +28,10 @@ public class DownloadRecordController {
 
     @ApiOperation(value = "获取下载记录（测试通过）")
     @GetMapping
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "size", value = "每页数量", dataType = "int", paramType = "query", defaultValue = "20"),
+            @ApiImplicitParam(name = "sort", value = "按某属性排序", dataType = "String", paramType = "query", defaultValue = "recordId"),
+            @ApiImplicitParam(name = "direction", value = "排序方式", dataType = "String", paramType = "query", defaultValue = "DESC")})
     public ResponseEntity<Page<DownloadRecord>> findDownloadedRecord(@PageableDefault(size = 20, sort = {"recordId"}, direction = Sort.Direction.DESC)Pageable pageable,
                                                                     @RequestParam(value = "userId",required = false) Integer userId,
                                                                     @RequestParam(value = "resourceId",required = false) Integer resourceId){

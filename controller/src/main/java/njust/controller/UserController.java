@@ -1,8 +1,6 @@
 package njust.controller;
 
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiParam;
+import io.swagger.annotations.*;
 import njust.domain.AuctionMsg;
 import njust.domain.Resource;
 import njust.domain.User;
@@ -52,6 +50,10 @@ public class UserController {
     }
 
     @ApiOperation(value = "获取全部用户信息（测试通过）")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "size", value = "每页数量", dataType = "int", paramType = "query", defaultValue = "20"),
+            @ApiImplicitParam(name = "sort", value = "按某属性排序", dataType = "String", paramType = "query", defaultValue = "userId"),
+            @ApiImplicitParam(name = "direction", value = "排序方式", dataType = "String", paramType = "query", defaultValue = "DESC"),})
     @GetMapping
     public ResponseEntity<Page<User>> findAllUser(@PageableDefault(size = 20, sort = {"userId"}, direction = Sort.Direction.DESC)Pageable pageable){
         return new ResponseEntity<>(userService.findAllUser(pageable),HttpStatus.OK);
@@ -66,6 +68,10 @@ public class UserController {
 
 
     @ApiOperation(value = "获取个人的全部上传资料（测试通过）")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "size", value = "每页数量", dataType = "int", paramType = "query", defaultValue = "20"),
+            @ApiImplicitParam(name = "sort", value = "按某属性排序", dataType = "String", paramType = "query", defaultValue = "resId"),
+            @ApiImplicitParam(name = "direction", value = "排序方式", dataType = "String", paramType = "query", defaultValue = "DESC")})
     @GetMapping(value ="/{userId}/uploads")
     public ResponseEntity<Page<Resource>> getUploadedResources(@PageableDefault(size = 20, sort = {"resId"}, direction = Sort.Direction.DESC)Pageable pageable,
                                                                @PathVariable("userId") Integer userId){
