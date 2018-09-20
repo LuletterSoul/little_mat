@@ -42,7 +42,7 @@ public class AuctionMsgController
                                                        @RequestParam("title") String title,
                                                        @RequestParam("content") String content,
                                                        @RequestParam("price") Float price,
-                                                       @RequestParam("photo")MultipartFile photo,
+                                                       @RequestPart MultipartFile photo,
                                                        HttpServletRequest request){
         return new ResponseEntity<>(auctionMsgService.createAuctionMsg(userId,title,content,price,photo,request),HttpStatus.OK);
     }
@@ -52,7 +52,7 @@ public class AuctionMsgController
     @PostMapping(value = "/{amsgId}/photos",consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<Integer> uploadPhotos(@PathVariable("amsgId") Integer amsgId,
                                                    @ApiParam(value = "上传者的Id",required = true,defaultValue = "") @RequestParam("userId") Integer userId,
-                                                       @RequestPart("photo")MultipartFile photo,
+                                                       @RequestPart MultipartFile photo,
                                                        HttpServletRequest request){
         return new ResponseEntity<>(auctionMsgService.uploadAuctionPhoto(amsgId,photo,userId),HttpStatus.CREATED);
     }

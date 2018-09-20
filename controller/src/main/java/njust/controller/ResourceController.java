@@ -112,7 +112,7 @@ public class ResourceController
     @ApiOperation(value = "上传资料（测试通过）")
     @PostMapping(value = "/{resId}/file",consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<Resource> uploadResource(
-            @RequestPart("file") MultipartFile file, @PathVariable("resId") Integer resId){
+            @RequestPart MultipartFile file, @PathVariable("resId") Integer resId){
         return new ResponseEntity<>(resourceService.uploadResource(resId,file),HttpStatus.OK);
     }
 
