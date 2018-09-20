@@ -105,7 +105,7 @@ public class ResourceController
                                                    @RequestParam(value ="comId",required = false) Integer comId,
                                                    @RequestParam(value = "courseId",required = false)Integer courseId,
                                                    @RequestParam(value = "type",required = false)Integer type,
-                                                   @RequestParam("file")MultipartFile file,
+                                                   @RequestPart("file") MultipartFile file,
                                                    HttpServletRequest request){
         return new ResponseEntity<>(resourceService.uploadResource(userId,comId,courseId, type, request, file),HttpStatus.OK);
     }
