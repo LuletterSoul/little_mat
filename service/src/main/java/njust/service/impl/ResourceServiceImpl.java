@@ -1,15 +1,10 @@
 package njust.service.impl;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
 import java.util.Date;
 import java.util.Set;
 
-import javax.servlet.ServletContext;
-import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -20,7 +15,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
 
 import njust.dao.*;
 import njust.domain.Administrator;
@@ -29,7 +23,7 @@ import njust.domain.Resource;
 import njust.domain.User;
 import njust.service.ResourceService;
 import njust.util.DateUtil;
-import njust.util.EncoderUtil;
+import org.springframework.web.multipart.MultipartFile;
 
 @Service
 public class ResourceServiceImpl implements ResourceService {
@@ -158,19 +152,28 @@ public class ResourceServiceImpl implements ResourceService {
     }
 
     @Override
-    public Resource uploadResource(Integer userId, Integer comId, Integer courseId, Integer type, HttpServletRequest request, MultipartFile multipartFile) {
+    public Resource createResource(Integer userId, Integer comId, Integer courseId, Integer type) {
         Resource resource = new Resource();
         User user = userJpaDao.findOne(userId);
         resource.setUploader(user);
+        if(comId!=null){
+            resource.setCompetition(competitionJpaDao.findOne(comId));
+        }
+        else if(courseId!=null){
+            resource.setCourse(courseJpaDao.findOne(courseId));
+        }
+        if(type!=null){
+            resource.setType(type);
+        }
+        resource.setStatus(0);
+        return resourceJpaDao.save(resource);
+    }
+
+    @Override
+    public Resource uploadResource(Integer resId, MultipartFile multipartFile, HttpServletRequest request) {
+        Resource resource = resourceJpaDao.findOne(resId);
+        String relativePath = "\\user\\"+resource.getUploader().getUserId();
         String fileName = multipartFile.getOriginalFilename();
-
-/*        int fileNum = resourceJpaDao.findResourcesByNameAndUploader(fileName,user).size();
-        if(fileNum!=0){
-            fileName = fileName.substring(0,fileName.lastIndexOf("."))+" ("+fileNum+")"+fileName.substring(fileName.lastIndexOf("."));
-        }*/
-
-        //ServletContext context = request.getServletContext();
-        String relativePath = "\\user\\"+userId;
         String timeableFilename = fileName.substring(0, fileName.lastIndexOf(".")) + "-" + DateUtil.DateToString(new Date(), "yyyy-MM-dd-HH-mm-ss") + fileName.substring(fileName.lastIndexOf("."));
         System.out.println(relativePath);
 //        String realPath = context.getRealPath(relativePath);
@@ -184,15 +187,6 @@ public class ResourceServiceImpl implements ResourceService {
         catch (IOException e)
         {
             e.printStackTrace();
-        }
-        if(comId!=null){
-            resource.setCompetition(competitionJpaDao.findOne(comId));
-        }
-        else if(courseId!=null){
-            resource.setCourse(courseJpaDao.findOne(courseId));
-        }
-        if(type!=null){
-            resource.setType(type);
         }
         resource.setStatus(0);
         resource.setName(fileName);

@@ -8,6 +8,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -99,17 +100,22 @@ public class ResourceController
 //        return new ResponseEntity<>(resourceService.findResourceByStatus(status,pageable), HttpStatus.OK);
 //    }
 
-    @ApiOperation(value = "上传资料（测试通过）")
+    @ApiOperation(value = "创建资料（测试通过）")
     @PostMapping
-    public ResponseEntity<Resource> uploadResource(@RequestParam("userId") Integer userId,
+    public ResponseEntity<Resource> createResource(@RequestParam("userId") Integer userId,
                                                    @RequestParam(value ="comId",required = false) Integer comId,
                                                    @RequestParam(value = "courseId",required = false)Integer courseId,
-                                                   @RequestParam(value = "type",required = false)Integer type,
-                                                   @RequestPart("file") MultipartFile file,
-                                                   HttpServletRequest request){
-        return new ResponseEntity<>(resourceService.uploadResource(userId,comId,courseId, type, request, file),HttpStatus.OK);
+                                                   @RequestParam(value = "type",required = false)Integer type){
+        return new ResponseEntity<>(resourceService.createResource(userId,comId,courseId,type),HttpStatus.OK);
     }
 
+    @ApiOperation(value = "上传资料（测试通过）")
+    @PostMapping(value = "/{resId}/file",consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<Resource> uploadResource(
+            @RequestPart("file") MultipartFile file,
+            HttpServletRequest request, @PathVariable("resId") Integer resId){
+        return new ResponseEntity<>(resourceService.uploadResource(resId,file,request),HttpStatus.OK);
+    }
 
     @ApiOperation(value = "下载资料（测试通过 但是下载可能存在乱码问题(待前端结合测试)）")
     @PostMapping(value = "/{resId}/user/{userId}")

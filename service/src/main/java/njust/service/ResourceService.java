@@ -29,7 +29,9 @@ public interface ResourceService
 
     Resource updateResource(Resource resource);
 
-    Resource uploadResource(Integer userId, Integer comId, Integer courseId, Integer type, HttpServletRequest request, MultipartFile multipartFile);
+    Resource uploadResource(Integer resId, MultipartFile multipartFile, HttpServletRequest request);
+
+    Resource createResource(Integer userId, Integer comId, Integer courseId, Integer type);
 
     DownloadRecord downloadResource(Integer resId, Integer userId, HttpServletResponse response);
 
