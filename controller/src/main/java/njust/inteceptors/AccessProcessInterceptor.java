@@ -27,7 +27,7 @@ public class AccessProcessInterceptor implements HandlerInterceptor
         httpServletResponse.setHeader("Access-Control-Allow-Origin", "*");
 
         httpServletResponse.setHeader("Access-Control-Allow-Headers",
-                "Content-Type,Content-Length, Authorization, Accept,X-Requested-With,X-timestamp,Username,X-ApiKey");
+                "Content-Type,Content-Length, Authorization, Accept,X-Requested-With,X-timestamp,Username,X-ApiKey,X-Suggested-Filename");
 
         httpServletResponse.setHeader("Access-Control-Allow-Methods",
             "PUT,POST,GET,DELETE,OPTIONS");
