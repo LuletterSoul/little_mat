@@ -32,6 +32,8 @@ public class AccessProcessInterceptor implements HandlerInterceptor
         httpServletResponse.setHeader("Access-Control-Allow-Methods",
             "PUT,POST,GET,DELETE,OPTIONS");
 
+        httpServletResponse.setHeader("Access-Control-Expose-Headers","X-Disposable-Token,X-Suggested-Filename");
+
         String method = httpServletRequest.getMethod();
 
         if (method.equals("OPTIONS"))
