@@ -18,4 +18,5 @@ public interface AuctionMsgJpaDao extends JpaRepository<AuctionMsg,Integer> {
 
 //    @Query(value = "select a from AuctionMsg a where a.publisher =:publisher order by ?#{pageable}")
     Page<AuctionMsg> findAuctionMsgByPublisher(User publisher, Pageable pageable);
+
 }

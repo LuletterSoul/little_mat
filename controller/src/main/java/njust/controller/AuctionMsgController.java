@@ -19,6 +19,7 @@ import njust.service.AuctionMsgService;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.List;
 
 
 @Api(description = "交易业务")
@@ -55,6 +56,7 @@ public class AuctionMsgController
                                                        HttpServletRequest request){
         return new ResponseEntity<>(auctionMsgService.uploadAuctionPhoto(amsgId,photo,userId),HttpStatus.CREATED);
     }
+
 
     /**
      * @param pageable

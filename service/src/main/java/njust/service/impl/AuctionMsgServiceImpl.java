@@ -23,6 +23,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.io.File;
 import java.io.IOException;
 import java.util.Date;
+import java.util.List;
 import java.util.Set;
 
 @Service
@@ -189,9 +190,15 @@ public class AuctionMsgServiceImpl implements AuctionMsgService {
 
         photo1.setPhotoPath(realPath);
         auctionMsg = auctionMsgJpaDao.save(auctionMsg);
+        photo1.setRelativePath(relativePath.replace("\\","/"));
         photo1.setAuctionMsg(auctionMsg);
         photoJpaDao.save(photo1);
         return auctionMsg;
+    }
+
+    @Override
+    public List<String> getPhotos(Integer amsgId) {
+        return null;
     }
 
     @Override
@@ -202,7 +209,8 @@ public class AuctionMsgServiceImpl implements AuctionMsgService {
         String relativePath = "\\user\\"+userId+"\\auctionMsg";
         System.out.println(relativePath);
         //String realPath = context.getRealPath(relativePath);
-        String timeableFilename =fileName.substring(0,fileName.lastIndexOf("."))+"-"+DateUtil.DateToString(new Date(),"yyyy-MM-dd-HH-mm-ss") +fileName.substring(fileName.lastIndexOf("."));
+        String timeableFilename =fileName.substring(0,fileName.lastIndexOf("."))+"-"
+                +DateUtil.DateToString(new Date(),"yyyy-MM-dd-HH-mm-ss") +fileName.substring(fileName.lastIndexOf("."));
         String realPath = PathUtils.getAbsolutePath(relativePath,timeableFilename);
         System.out.println(realPath);
         try
@@ -214,6 +222,7 @@ public class AuctionMsgServiceImpl implements AuctionMsgService {
             e.printStackTrace();
         }
         photo1.setPhotoPath(realPath);
+        photo1.setRelativePath(relativePath.replace("\\","/"));
         AuctionMsg msg  = auctionMsgJpaDao.findOne(amsgId);
         photo1.setAuctionMsg(msg);
         photoJpaDao.save(photo1);

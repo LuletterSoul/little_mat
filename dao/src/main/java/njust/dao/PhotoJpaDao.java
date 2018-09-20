@@ -1,7 +1,15 @@
 package njust.dao;
 
-import njust.domain.Photo;
+
+import java.util.List;
+
+import njust.domain.AuctionMsg;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface PhotoJpaDao extends JpaRepository<Photo,Integer> {
+import njust.domain.Photo;
+
+
+public interface PhotoJpaDao extends JpaRepository<Photo, Integer>
+{
+    List<Photo> findPhotoByAuctionMsg(AuctionMsg msg);
 }

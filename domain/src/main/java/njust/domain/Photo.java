@@ -17,6 +17,15 @@ public class Photo {
     @GenericGenerator(name = "increment", strategy = "increment")
     @GeneratedValue(generator = "increment")
     private Integer photoId;
+
+    /**
+     * 存相对路径
+     */
+    private String relativePath;
+
+    /**
+     * 存绝对路径
+     */
     private String photoPath;
 
     @JsonIgnore

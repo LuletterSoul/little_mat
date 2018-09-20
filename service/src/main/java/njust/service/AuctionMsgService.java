@@ -7,6 +7,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.List;
 
 
 public interface AuctionMsgService
@@ -26,6 +27,8 @@ public interface AuctionMsgService
     AuctionMsg createAuctionMsg(Integer userId, AuctionMsg auctionMsg, MultipartFile[] photos, HttpServletRequest request);
 
     AuctionMsg createAuctionMsg(Integer userId, String title, String content, Float price, MultipartFile photo, HttpServletRequest request);
+
+    List<String> getPhotos(Integer amsgId);
 
     Integer uploadAuctionPhoto(Integer amsgId, MultipartFile photo, Integer userId);
 
