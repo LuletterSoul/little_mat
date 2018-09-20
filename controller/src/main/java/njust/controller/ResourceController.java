@@ -110,6 +110,7 @@ public class ResourceController
         return new ResponseEntity<>(resourceService.uploadResource(userId,comId,courseId, type, request, file),HttpStatus.OK);
     }
 
+
     @ApiOperation(value = "下载资料（测试通过 但是下载可能存在乱码问题(待前端结合测试)）")
     @PostMapping(value = "/{resId}/user/{userId}")
     public ResponseEntity<DownloadRecord> downloadResource(@PathVariable("resId")Integer resId,

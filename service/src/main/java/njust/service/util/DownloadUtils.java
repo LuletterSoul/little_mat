@@ -31,7 +31,7 @@ public class DownloadUtils
                 response.addHeader("X-Suggested-Filename", suggestedFilename);
                 response.addHeader("Content-Length", "" + file.length());
                 OutputStream out = new BufferedOutputStream(response.getOutputStream());
-                byte[] buffer = new byte[1024 * 1024];
+                byte[] buffer = new byte[1024];
                 int i = -1;
                 while ((i = fis.read(buffer)) != -1)
                 {
