@@ -64,10 +64,10 @@ public class SpringMvcConfiguration extends WebMvcConfigurerAdapter
         return resolver;
     }
 
-    @Bean
-    public MultipartResolver multipartResolver() {
-        return new StandardServletMultipartResolver();
-    }
+//    @Bean
+//    public MultipartResolver multipartResolver() {
+//        return new StandardServletMultipartResolver();
+//    }
 
 //    @Bean
 //    public RequestMappingHandlerAdapter requestMappingHandlerAdapter() {

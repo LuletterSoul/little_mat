@@ -7,7 +7,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 
@@ -29,7 +28,7 @@ public interface ResourceService
 
     Resource updateResource(Resource resource);
 
-    Resource uploadResource(Integer resId, MultipartFile multipartFile, HttpServletRequest request);
+    Resource uploadResource(Integer resId, MultipartFile multipartFile);
 
     Resource createResource(Integer userId, Integer comId, Integer courseId, Integer type);
 

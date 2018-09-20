@@ -112,9 +112,8 @@ public class ResourceController
     @ApiOperation(value = "上传资料（测试通过）")
     @PostMapping(value = "/{resId}/file",consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<Resource> uploadResource(
-            @RequestPart("file") MultipartFile file,
-            HttpServletRequest request, @PathVariable("resId") Integer resId){
-        return new ResponseEntity<>(resourceService.uploadResource(resId,file,request),HttpStatus.OK);
+            @RequestPart("file") MultipartFile file, @PathVariable("resId") Integer resId){
+        return new ResponseEntity<>(resourceService.uploadResource(resId,file),HttpStatus.OK);
     }
 
     @ApiOperation(value = "下载资料（测试通过 但是下载可能存在乱码问题(待前端结合测试)）")

@@ -5,7 +5,6 @@ import java.io.IOException;
 import java.util.Date;
 import java.util.Set;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import njust.service.util.DownloadUtils;
@@ -170,7 +169,7 @@ public class ResourceServiceImpl implements ResourceService {
     }
 
     @Override
-    public Resource uploadResource(Integer resId, MultipartFile multipartFile, HttpServletRequest request) {
+    public Resource uploadResource(Integer resId, MultipartFile multipartFile) {
         Resource resource = resourceJpaDao.findOne(resId);
         String relativePath = "\\user\\"+resource.getUploader().getUserId();
         String fileName = multipartFile.getOriginalFilename();
